@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="br.com.golfinvest.data.view.Produtos">
+  <grid id="27dc6" binding="produtoRootPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="632" height="470"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="a070d" binding="principalPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints>
+          <card name="Card1"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="6d67e" binding="southButtonPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints border-constraint="South"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="bb784" class="javax.swing.JButton" binding="inserirTesteButton" default-binding="true">
+                <constraints/>
+                <properties>
+                  <text value="Inserir Teste"/>
+                </properties>
+              </component>
+              <component id="ad6d" class="javax.swing.JButton" binding="insertButton">
+                <constraints/>
+                <properties>
+                  <font size="16" style="1"/>
+                  <text value="Inserir"/>
+                </properties>
+              </component>
+              <component id="ab154" class="javax.swing.JButton" binding="editButton">
+                <constraints/>
+                <properties>
+                  <font size="16" style="1"/>
+                  <text value="Editar"/>
+                </properties>
+              </component>
+              <component id="19fa" class="javax.swing.JButton" binding="cancelButton">
+                <constraints/>
+                <properties>
+                  <font size="16" style="1"/>
+                  <text value="Cancelar/Limpar"/>
+                </properties>
+              </component>
+              <component id="a67e1" class="javax.swing.JButton" binding="deleteButton">
+                <constraints/>
+                <properties>
+                  <font size="16" style="1"/>
+                  <text value="Deletar"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="a1d67" binding="centerPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+            <constraints border-constraint="Center"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <splitpane id="3c789" binding="centerSplitPanel">
+                <constraints>
+                  <card name="Card1"/>
+                </constraints>
+                <properties>
+                  <dividerLocation value="592"/>
+                  <dividerSize value="10"/>
+                  <enabled value="false"/>
+                </properties>
+                <border type="bevel-raised"/>
+                <children>
+                  <grid id="e7902" binding="rightSplittedPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <splitpane position="right"/>
+                    </constraints>
+                    <properties/>
+                    <border type="bevel-raised" title="Produtos Registrados">
+                      <font size="16" style="1"/>
+                    </border>
+                    <children>
+                      <scrollpane id="b2848">
+                        <constraints>
+                          <card name="Card1"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="d1a04" class="javax.swing.JTable" binding="produtosTable">
+                            <constraints/>
+                            <properties/>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
+                  </grid>
+                  <grid id="1a43f" binding="leftSplittedPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                    <properties/>
+                    <border type="bevel-raised" title="Registro de Produtos">
+                      <font size="16" style="1"/>
+                    </border>
+                    <children>
+                      <grid id="9d2a3" binding="topLeftPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="20" left="20" bottom="20" right="10"/>
+                        <constraints border-constraint="North"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="b7259" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <font size="18" style="1"/>
+                              <text value="Nome do Produto: *"/>
+                            </properties>
+                          </component>
+                          <component id="ed5e9" class="javax.swing.JTextField" binding="nomeProdutoTextField">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <font size="18" style="1"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="61e54" binding="eastLeftPanel" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints border-constraint="East"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <hspacer id="e6b9b">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <vspacer id="3ef1a">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </vspacer>
+                        </children>
+                      </grid>
+                      <grid id="31ee1" binding="centerLeftPanel" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="20" bottom="10" right="10"/>
+                        <constraints border-constraint="Center"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <scrollpane id="ee6c3">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none" title="Lista Tags Coluna Produto*" title-position="2"/>
+                            <children>
+                              <component id="a29ee" class="javax.swing.JList" binding="tagProdList">
+                                <constraints/>
+                                <properties>
+                                  <background color="-262193"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </scrollpane>
+                          <scrollpane id="8b091">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none" title="Lista Tags Coluna Nível 2"/>
+                            <children>
+                              <component id="5b846" class="javax.swing.JList" binding="tagN2List">
+                                <constraints/>
+                                <properties>
+                                  <background color="-918273"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </scrollpane>
+                          <component id="3df66" class="javax.swing.JButton" binding="tagProdAddButton">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-262193"/>
+                              <text value="Adicionar"/>
+                            </properties>
+                          </component>
+                          <component id="d6bcf" class="javax.swing.JButton" binding="tagProdDeleteButton">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-262193"/>
+                              <text value="Deletar"/>
+                            </properties>
+                          </component>
+                          <component id="5d157" class="javax.swing.JTextField" binding="tagN2TextField">
+                            <constraints>
+                              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                            </properties>
+                          </component>
+                          <component id="2313e" class="javax.swing.JButton" binding="tagN2DeleteButton">
+                            <constraints>
+                              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <text value="Deletar"/>
+                            </properties>
+                          </component>
+                          <component id="542b9" class="javax.swing.JButton" binding="tagN2AddButton">
+                            <constraints>
+                              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <text value="Adicionar"/>
+                            </properties>
+                          </component>
+                          <component id="c960c" class="javax.swing.JTextField" binding="tagProdTextField">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-262193"/>
+                              <text value=""/>
+                              <toolTipText value="Insira a Tag aqui e clique em adicionar"/>
+                            </properties>
+                          </component>
+                          <scrollpane id="ef952">
+                            <constraints>
+                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none" title="Lista Tags Coluna Nível 1"/>
+                            <children>
+                              <component id="a42c1" class="javax.swing.JList" binding="tagN1List">
+                                <constraints/>
+                                <properties>
+                                  <background color="-918273"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </scrollpane>
+                          <component id="e1cdd" class="javax.swing.JTextField" binding="tagN1TextField">
+                            <constraints>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <toolTipText value="Insira a Tag aqui e clique em adicionar"/>
+                            </properties>
+                          </component>
+                          <component id="815ed" class="javax.swing.JButton" binding="tagN1DeleteButton">
+                            <constraints>
+                              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <text value="Deletar"/>
+                            </properties>
+                          </component>
+                          <component id="4ef9e" class="javax.swing.JButton" binding="tagN1AddButton">
+                            <constraints>
+                              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <text value="Adicionar"/>
+                            </properties>
+                          </component>
+                          <scrollpane id="e3486">
+                            <constraints>
+                              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                            <border type="none" title="Lista Tags Coluna Nível 3"/>
+                            <children>
+                              <component id="72203" class="javax.swing.JList" binding="tagN3List">
+                                <constraints/>
+                                <properties>
+                                  <background color="-918273"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </scrollpane>
+                          <component id="2ac43" class="javax.swing.JTextField" binding="tagN3TextField">
+                            <constraints>
+                              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <toolTipText value="Insira a Tag aqui e clique em adicionar"/>
+                            </properties>
+                          </component>
+                          <component id="ede09" class="javax.swing.JButton" binding="tagN3DeleteButton">
+                            <constraints>
+                              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <text value="Deletar"/>
+                            </properties>
+                          </component>
+                          <component id="283a2" class="javax.swing.JButton" binding="tagN3AddButton">
+                            <constraints>
+                              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-918273"/>
+                              <text value="Adicionar"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </splitpane>
+            </children>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

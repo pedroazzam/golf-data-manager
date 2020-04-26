@@ -1,0 +1,3 @@
+INSERT INTO produto (nome, tag_col_produto, tag_col_nivel01, tag_col_nivel02, tag_col_nivel03) VALUES('Mesa-Golf', 'Mesa', null, null, null);
+INSERT INTO produto (nome, tag_col_produto, tag_col_nivel01, tag_col_nivel02, tag_col_nivel03) VALUES('Renda Fixa', 'Renda Fixa', null, null, null);
+INSERT INTO produto (nome, tag_col_produto, tag_col_nivel01, tag_col_nivel02, tag_col_nivel03) VALUES('Renda Variavel', 'Bovespa;BTC;BMF', null, null, null);

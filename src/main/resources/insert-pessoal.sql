@@ -1,0 +1,6 @@
+INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta) VALUES('Pedro Azzam', 'pedro@email.com', '111.111.111-01', 'A0001', 341, '0522', '28282-1');
+INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta) VALUES('Madalina Azzam', 'madalina@email.com', '111.111.111-02', 'A0002', 341, '0522', '28282-1');
+INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta) VALUES('Tuca Azzam', 'tuca@email.com', '111.111.111-03', 'A0003', 341, '0522', '28282-1');
+INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta) VALUES('Pépe Azzam', 'pepe@email.com', '111.111.111-04', 'A0004', 341, '0522', '28282-1');
+INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta) VALUES('Antônio Azzam', 'antonio@email.com', '111.111.111-05', 'A0005', 341, '0522', '28282-1');
+INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta) VALUES('Latifah Azzam', 'latifah@email.com', '111.111.111-06', 'A0006', 341, '0522', '28282-1');
