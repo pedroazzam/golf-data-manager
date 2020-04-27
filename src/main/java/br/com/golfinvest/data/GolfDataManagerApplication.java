@@ -8,6 +8,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import sun.applet.Main;
 
+import javax.swing.*;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 
 @SpringBootApplication
 public class GolfDataManagerApplication {
@@ -18,9 +23,11 @@ public class GolfDataManagerApplication {
 
 
 	public static void main(String[] args) {
+
 		ConfigurableApplicationContext context = new SpringApplicationBuilder(
 				GolfDataManagerApplication.class).headless(false).run(args);
 
+//		JOptionPane.showMessageDialog(null,"okkkkkkkkkkkkk");
 		MainFrame mainFrame = (MainFrame) context.getBean("mainFrame");
 		mainFrame.initComponents();
 	}

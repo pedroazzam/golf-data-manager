@@ -16,4 +16,17 @@ public class ConnectionFactory {
         }
         return null;
     }
+
+    public Connection getConnectionAWS() {
+        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+            String caminhoBD = "//azzam-dev-db.cfhbklqjffwo.sa-east-1.rds.amazonaws.com/devdb";
+            return DriverManager.getConnection("jdbc:mysql:" + caminhoBD, "admin", "Pgda9684");
+        } catch (Exception e) {
+            System.out.println("nao conectou...........................");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -1,7 +1,13 @@
 package br.com.golfinvest.data.view;
 
+import br.com.golfinvest.data.model.ActivationLogDAO;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import javafx.scene.shape.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.ResourceUtils;
 
@@ -12,8 +18,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Scanner;
 
 public class MainFrame extends JFrame {
@@ -27,6 +35,7 @@ public class MainFrame extends JFrame {
     private JButton pessoalButton;
     private JButton produtoButton;
     private JButton capitaoButton;
+    private JButton button1;
 
 
     @Autowired
@@ -35,6 +44,7 @@ public class MainFrame extends JFrame {
     public MainFrame(String title) {
         super();
         setTitle(title);
+
     }
 
     public void initComponents() {
@@ -50,10 +60,15 @@ public class MainFrame extends JFrame {
         Font font = new Font("Serif", Font.BOLD, 15);
         dbAddressTextField.setFont(font);
 
-//        buttonsPanel.setVisible(false);
+        openDBButon.setEnabled(false);
+        createDBButton.setEnabled(false);
+
+        buttonsPanel.setVisible(false);
         setLocationRelativeTo(null);
         regEvents();
         setVisible(true);
+
+        credentialValidation();
 
     }
 
@@ -128,20 +143,69 @@ public class MainFrame extends JFrame {
             }
         });
 
+
     }
+
+    public void credentialValidation() {
+        // Credential validation ------------------------------
+        String title = getTitle();
+        setTitle(title + " [...aguarde...]");
+        System.out.println("Validating credential...");
+        ActivationLogDAO ald = new ActivationLogDAO();
+        boolean valid = true;
+//        boolean valid = ald.validateCredential("golf");
+//        ald.logRegister(valid);
+
+        if (valid) {
+            openDBButon.setEnabled(true);
+            createDBButton.setEnabled(true);
+            setTitle(title);
+            System.out.println("Validation successful...");
+        } else {
+            setTitle(title + " [...não validado...] - tente novamente");
+            System.out.println("Validation denied...");
+        }
+        // Credential validation ------------------------------
+    }
+
 
     public void createTables() throws FileNotFoundException {
         if (!dbAddressTextField.getText().isEmpty()) {
-            File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "init-db.sql");
-            System.out.println(file.getPath());
-            String ic;
-            Scanner sc = new Scanner(file);//file to be scanned
-            while (sc.hasNextLine()) {
-                ic = sc.nextLine();
-                System.out.println("antes " + ic + " depois");
-                jdbcTemplate.execute(ic);
+
+
+//            File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "init-db.sql");
+//            System.out.println(file.getPath());
+//            JOptionPane.showMessageDialog(null, file.getPath());
+//
+//            String ic;
+//            Scanner sc = new Scanner(file);//file to be scanned
+//            while (sc.hasNextLine()) {
+//                ic = sc.nextLine();
+//                System.out.println("antes " + ic + " depois");
+//                jdbcTemplate.execute(ic);
+//            }
+//            sc.close(); //closes the scanner
+
+
+            try {
+                InputStream is = new ClassPathResource("init-db.sql").getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder out = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.append(line);   // add everything to StringBuilder
+//                    JOptionPane.showMessageDialog(null, line);
+                    System.out.println("antes " + line + " depois");
+                    jdbcTemplate.execute(line);
+                    // here you can have your logic of comparison.
+                    if (line.toString().equals(".")) {
+                        // do something
+                    }
+                }
+            } catch (IOException ioException) {
+                JOptionPane.showMessageDialog(null, ioException.getCause());
+                ioException.printStackTrace();
             }
-            sc.close(); //closes the scanner
         } else {
             JOptionPane.showMessageDialog(null, "Para criar as tabelas, primeiro precisa criar ou abrir um arquivo de banco de dados.");
         }
@@ -159,5 +223,93 @@ public class MainFrame extends JFrame {
 //        buttonsPanel.setVisible(true);
     }
 
+
+    {
+// GUI initializer generated by IntelliJ IDEA GUI Designer
+// >>> IMPORTANT!! <<<
+// DO NOT EDIT OR ADD ANY CODE HERE!
+        $$$setupUI$$$();
+    }
+
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$() {
+        mainFrameRootPanel = new JPanel();
+        mainFrameRootPanel.setLayout(new BorderLayout(0, 0));
+        dbPanel = new JPanel();
+        dbPanel.setLayout(new GridLayoutManager(2, 2, new Insets(10, 10, 10, 10), -1, -1));
+        mainFrameRootPanel.add(dbPanel, BorderLayout.NORTH);
+        dbPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        openDBButon = new JButton();
+        Font openDBButonFont = this.$$$getFont$$$(null, Font.BOLD, -1, openDBButon.getFont());
+        if (openDBButonFont != null) openDBButon.setFont(openDBButonFont);
+        openDBButon.setText("Abrir Banco de Dados");
+        dbPanel.add(openDBButon, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dbAddressTextField = new JTextField();
+        dbAddressTextField.setBackground(new Color(-3879731));
+        Font dbAddressTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, dbAddressTextField.getFont());
+        if (dbAddressTextFieldFont != null) dbAddressTextField.setFont(dbAddressTextFieldFont);
+        dbPanel.add(dbAddressTextField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        createDBButton = new JButton();
+        Font createDBButtonFont = this.$$$getFont$$$(null, Font.BOLD, -1, createDBButton.getFont());
+        if (createDBButtonFont != null) createDBButton.setFont(createDBButtonFont);
+        createDBButton.setText("Criar Banco de Dados");
+        dbPanel.add(createDBButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 50, 50, 50), -1, -1));
+        mainFrameRootPanel.add(buttonsPanel, BorderLayout.CENTER);
+        buttonsPanelLabel = new JLabel();
+        Font buttonsPanelLabelFont = this.$$$getFont$$$(null, Font.BOLD, 18, buttonsPanelLabel.getFont());
+        if (buttonsPanelLabelFont != null) buttonsPanelLabel.setFont(buttonsPanelLabelFont);
+        buttonsPanelLabel.setHorizontalAlignment(0);
+        buttonsPanelLabel.setText("Escolha a informação a ser preenchida no banco de dados");
+        buttonsPanel.add(buttonsPanelLabel, new GridConstraints(0, 0, 6, 2, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        pessoalButton = new JButton();
+        Font pessoalButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, pessoalButton.getFont());
+        if (pessoalButtonFont != null) pessoalButton.setFont(pessoalButtonFont);
+        pessoalButton.setText("Pessoal/Assessores");
+        buttonsPanel.add(pessoalButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        produtoButton = new JButton();
+        Font produtoButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, produtoButton.getFont());
+        if (produtoButtonFont != null) produtoButton.setFont(produtoButtonFont);
+        produtoButton.setText("Produto");
+        buttonsPanel.add(produtoButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        capitaoButton = new JButton();
+        Font capitaoButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, capitaoButton.getFont());
+        if (capitaoButtonFont != null) capitaoButton.setFont(capitaoButtonFont);
+        capitaoButton.setText("Capitão");
+        buttonsPanel.add(capitaoButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return mainFrameRootPanel;
+    }
 
 }
