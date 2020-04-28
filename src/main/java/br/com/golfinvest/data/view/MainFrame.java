@@ -142,6 +142,13 @@ public class MainFrame extends JFrame {
             }
         });
 
+        capitaoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
 
     }
 
