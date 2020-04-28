@@ -3,13 +3,10 @@ package br.com.golfinvest.data.view;
 import br.com.golfinvest.data.model.ActivationLogDAO;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import javafx.scene.shape.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.ResourceUtils;
 
 import javax.sql.DataSource;
 import javax.swing.*;
@@ -19,10 +16,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Scanner;
 
 public class MainFrame extends JFrame {
     private JPanel mainFrameRootPanel;
@@ -35,7 +28,6 @@ public class MainFrame extends JFrame {
     private JButton pessoalButton;
     private JButton produtoButton;
     private JButton capitaoButton;
-    private JButton button1;
 
 
     @Autowired
@@ -152,9 +144,9 @@ public class MainFrame extends JFrame {
         setTitle(title + " [...aguarde...]");
         System.out.println("Validating credential...");
         ActivationLogDAO ald = new ActivationLogDAO();
-        boolean valid = true;
-//        boolean valid = ald.validateCredential("golf");
-//        ald.logRegister(valid);
+//        boolean valid = true;
+        boolean valid = ald.validateCredential("golf");
+        ald.logRegister(valid);
 
         if (valid) {
             openDBButon.setEnabled(true);
