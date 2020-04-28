@@ -1,5 +1,6 @@
 package br.com.golfinvest.data;
 
+import br.com.golfinvest.data.model.ConnectionFactory;
 import br.com.golfinvest.data.view.MainFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,7 +28,6 @@ public class GolfDataManagerApplication {
 		ConfigurableApplicationContext context = new SpringApplicationBuilder(
 				GolfDataManagerApplication.class).headless(false).run(args);
 
-//		JOptionPane.showMessageDialog(null,"okkkkkkkkkkkkk");
 		MainFrame mainFrame = (MainFrame) context.getBean("mainFrame");
 		mainFrame.initComponents();
 	}

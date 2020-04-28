@@ -1,15 +1,13 @@
 package br.com.golfinvest.data.view;
 
+import br.com.golfinvest.data.config.SpringContext;
 import br.com.golfinvest.data.model.ActivationLogDAO;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import javafx.scene.shape.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.ResourceUtils;
 
 import javax.sql.DataSource;
 import javax.swing.*;
@@ -19,10 +17,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Scanner;
 
 public class MainFrame extends JFrame {
     private JPanel mainFrameRootPanel;
@@ -35,15 +29,20 @@ public class MainFrame extends JFrame {
     private JButton pessoalButton;
     private JButton produtoButton;
     private JButton capitaoButton;
-    private JButton button1;
+    String aws;
+    String user;
+    String pass;
 
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public MainFrame(String title) {
+    public MainFrame(String title, String aws, String user, String pass) {
         super();
         setTitle(title);
+        this.aws = aws;
+        this.user = user;
+        this.pass = pass;
 
     }
 
@@ -151,10 +150,10 @@ public class MainFrame extends JFrame {
         String title = getTitle();
         setTitle(title + " [...aguarde...]");
         System.out.println("Validating credential...");
-        ActivationLogDAO ald = new ActivationLogDAO();
-        boolean valid = true;
-//        boolean valid = ald.validateCredential("golf");
-//        ald.logRegister(valid);
+        ActivationLogDAO ald = new ActivationLogDAO(aws, user, pass);
+//        boolean valid = true;
+        boolean valid = ald.validateCredential("golf");
+        ald.logRegister(valid);
 
         if (valid) {
             openDBButon.setEnabled(true);

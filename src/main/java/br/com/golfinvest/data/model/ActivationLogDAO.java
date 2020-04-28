@@ -8,11 +8,21 @@ import java.util.Calendar;
 
 public class ActivationLogDAO {
 
+    String aws;
+    String user;
+    String pass;
+
+    public ActivationLogDAO(String aws, String user, String pass){
+        this.aws = aws;
+        this.user = user;
+        this.pass = pass;
+    }
+
         public boolean validateCredential(String credential) {
             boolean result = false;
             try {
                 String sql = "select activation from access_validation where credential = ?";
-                Connection con = new ConnectionFactory().getConnectionAWS();
+                Connection con = new ConnectionFactory(aws, user, pass).getConnectionAWS();
                 PreparedStatement stmt = con.prepareStatement(sql);
 
                 stmt.setString(1,credential);
@@ -34,7 +44,7 @@ public class ActivationLogDAO {
         try {
             String sql = "INSERT INTO golf_log(dia, log_activation) VALUES(?, ?)";
 
-            Connection con = new ConnectionFactory().getConnectionAWS();
+            Connection con = new ConnectionFactory(aws, user, pass).getConnectionAWS();
             PreparedStatement stmt = con.prepareStatement(sql);
 
             Calendar cal = Calendar.getInstance();

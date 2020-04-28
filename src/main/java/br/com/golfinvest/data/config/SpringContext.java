@@ -14,9 +14,33 @@ public class SpringContext {
     @Value("${title}")
     String title;
 
+    @Value("${aws}")
+    String aws;
+
+    @Value("${user}")
+    String user;
+
+    @Value("${pass}")
+    String pass;
+
     @Bean(name = "mainFrame")
     public MainFrame createMainFrame() {
-        return new MainFrame(title);
+        return new MainFrame(title, aws, user, pass);
+    }
+
+    @Bean(name = "aws")
+    public String CreateAWS(){
+        return aws;
+    }
+
+    @Bean(name = "user")
+    public String CreateUser(){
+        return user;
+    }
+
+    @Bean(name = "pass")
+    public String CreatePass(){
+        return pass;
     }
 
     @Bean
