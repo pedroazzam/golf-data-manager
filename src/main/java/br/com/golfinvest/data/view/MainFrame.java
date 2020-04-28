@@ -1,5 +1,6 @@
 package br.com.golfinvest.data.view;
 
+import br.com.golfinvest.data.config.SpringContext;
 import br.com.golfinvest.data.model.ActivationLogDAO;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -28,14 +29,20 @@ public class MainFrame extends JFrame {
     private JButton pessoalButton;
     private JButton produtoButton;
     private JButton capitaoButton;
+    String aws;
+    String user;
+    String pass;
 
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public MainFrame(String title) {
+    public MainFrame(String title, String aws, String user, String pass) {
         super();
         setTitle(title);
+        this.aws = aws;
+        this.user = user;
+        this.pass = pass;
 
     }
 
@@ -143,7 +150,7 @@ public class MainFrame extends JFrame {
         String title = getTitle();
         setTitle(title + " [...aguarde...]");
         System.out.println("Validating credential...");
-        ActivationLogDAO ald = new ActivationLogDAO();
+        ActivationLogDAO ald = new ActivationLogDAO(aws, user, pass);
 //        boolean valid = true;
         boolean valid = ald.validateCredential("golf");
         ald.logRegister(valid);

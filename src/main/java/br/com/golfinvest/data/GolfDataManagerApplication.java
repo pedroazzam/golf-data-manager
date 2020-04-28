@@ -29,8 +29,6 @@ public class GolfDataManagerApplication {
 				GolfDataManagerApplication.class).headless(false).run(args);
 
 		MainFrame mainFrame = (MainFrame) context.getBean("mainFrame");
-		ConnectionFactory connectionFactory = (ConnectionFactory) context.getBean("conFactory");
-
 		mainFrame.initComponents();
 	}
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 public class ConnectionFactory {
 
@@ -19,7 +20,8 @@ public class ConnectionFactory {
         this.user = user;
         this.pass = pass;
     }
-    public ConnectionFactory(){
+
+    public ConnectionFactory() {
 
     }
 
