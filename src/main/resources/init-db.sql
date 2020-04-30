@@ -11,7 +11,7 @@ CREATE TRIGGER IF NOT EXISTS pessoal_update_validations BEFORE UPDATE ON pessoal
 DROP TABLE IF EXISTS produto;
 CREATE TABLE produto (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, nome VARCHAR(100) NOT NULL UNIQUE, tag_col_produto VARCHAR(100), cond_tn1 TEXT CHECK( cond_tn1 IN ('OU','E') ) NOT NULL DEFAULT 'OU', tag_col_nivel01 VARCHAR(100), cond_tn2 TEXT CHECK( cond_tn2 IN ('OU','E') ) NOT NULL DEFAULT 'OU', tag_col_nivel02 VARCHAR(100), cond_tn3 TEXT CHECK( cond_tn3 IN ('OU','E') ) NOT NULL DEFAULT 'OU', tag_col_nivel03 VARCHAR(100));
 DROP TABLE IF EXISTS produto_capitao;
-CREATE TABLE produto_capitao (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, id_produto INTEGER UNIQUE, id_pessoal INTEGER, comissao NUMBER DESCRIPTION 'Percentual do que é recebido pela Golf. Exemplo: A Golf recebe 70% do total e quero gerar esta comissão em 21% do total, logo tenho que inserir 0,3 pois 21% é 30% de 70%.');
+CREATE TABLE produto_capitao (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, id_produto INTEGER, id_pessoal INTEGER, comissao NUMBER, CONSTRAINT UQ_columns UNIQUE (id_produto, id_pessoal), FOREIGN KEY (id_pessoal) REFERENCES pessoal(id) ON DELETE CASCADE, FOREIGN KEY (id_produto) REFERENCES produto(id) ON DELETE CASCADE);
 DROP TABLE IF EXISTS assessor_xerife;
 CREATE TABLE assessor_xerife (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, id_assessor INTEGER NOT NULL UNIQUE, id_pessoal INTEGER NOT NULL, comissao NUMBER DESCRIPTION 'Percentual do que é recebido pela Golf. Exemplo: A Golf recebe 70% do total e quero gerar esta comissão em 21% do total, logo tenho que inserir 0,3 pois 21% é 30% de 70%.');
 DROP TABLE IF EXISTS produto_regra_comissionamento;
