@@ -18,7 +18,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
-public class Produtos extends JFrame {
+public class ProdutosFrame extends JFrame {
 
     private JdbcTemplate jdbcTemplate;
     List<Produto> produtos;
@@ -64,7 +64,7 @@ public class Produtos extends JFrame {
     private JTextField nomeProdutoTextField;
     private JButton inserirTesteButton;
 
-    public Produtos(String title, JdbcTemplate jdbcTemplatePassed) {
+    public ProdutosFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
         title = title + " - (Registro de produtos no banco de dados)";
         setTitle(title);
@@ -76,7 +76,7 @@ public class Produtos extends JFrame {
     }
 
     public void initComponents() {
-        System.out.println("Init Components Produtos...");
+        System.out.println("Init Components ProdutosFrame...");
         setContentPane(produtoRootPanel);
         tableModel = new DefaultTableModel(col, 0);
         produtosTable.setModel(tableModel);
@@ -132,7 +132,7 @@ public class Produtos extends JFrame {
             public void componentAdded(ContainerEvent e) {
                 super.componentAdded(e);
                 //System.out.println("Someone is editing me!");
-                //Caso entre em modo de edição da tabela, rora um select again.
+                //Caso entre em modo de edição da tabela, roda um select again.
                 int sR = produtosTable.getSelectedRow();
                 cancelarEdicao();
                 produtosTable.setRowSelectionInterval(sR, sR);

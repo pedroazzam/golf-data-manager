@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="br.com.golfinvest.data.view.Pessoal">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="br.com.golfinvest.data.view.PessoalFrame">
   <grid id="27dc6" binding="pessoalRootPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="20" y="20" width="890" height="400"/>
@@ -13,7 +13,7 @@
         <properties>
           <toolTipText value=""/>
         </properties>
-        <border type="none" title-justification="1" title-position="1"/>
+        <border type="etched" title-justification="1" title-position="1"/>
         <children>
           <component id="8aa83" class="javax.swing.JLabel">
             <constraints>
@@ -100,7 +100,7 @@
         <margin top="30" left="0" bottom="50" right="20"/>
         <constraints border-constraint="Center"/>
         <properties/>
-        <border type="none"/>
+        <border type="etched"/>
         <children>
           <component id="81a0f" class="javax.swing.JTextField" binding="nomeTextField">
             <constraints>
