@@ -317,5 +317,4 @@ public class MainFrame extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return mainFrameRootPanel;
     }
-
 }

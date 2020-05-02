@@ -1,34 +1,99 @@
 package br.com.golfinvest.data.view;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Capitao extends JFrame {
 
     private JdbcTemplate jdbcTemplate;
     private JPanel capitaoRootPanel;
+    private JPanel fillFieldsPanel;
+    private JPanel tableCapitaesPanel;
+    private JComboBox capitaoComboBox;
+    private JList produtoList;
+    private JTextField comissaoTextField;
+    private JButton insertButton;
+    private JTable capitaesTable;
+    private JButton deleteButton;
+    private JButton limparCamposButton;
 
     public Capitao(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
-        title = title + " - (Registro de capitão de produto no banco de dados)";
+        title = title + " - (Registro de capitão de produto)";
         setTitle(title);
-        setSize(1000, 600);
+        setSize(600, 600);
         jdbcTemplate = jdbcTemplatePassed;
 
         initComponents();
         regEvents();
+
+
     }
 
     public void initComponents() {
         System.out.println("Init Components Capitao...");
         setContentPane(capitaoRootPanel);
 
+        iniciarTabelaCapitaes();
+        fillProdutoList();
+        fillCapitaoComboBox();
+
         setVisible(true);
     }
 
     public void regEvents() {
+
+        insertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inserirCapitao();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deletarCapitao();
+            }
+        });
+
+    }
+
+    public void inserirCapitao() {
+
+    }
+
+    public void deletarCapitao() {
+
+    }
+
+    public void iniciarTabelaCapitaes() {
+
+    }
+
+    public void limparCampos() {
+        capitaoComboBox.setSelectedItem(null);
+        fillProdutoList();
+        comissaoTextField.setText("");
+        iniciarTabelaCapitaes();
+
+    }
+
+    public void fillCapitaoComboBox() {
+
+    }
+
+    public void fillProdutoList() {
 
     }
 
@@ -48,7 +113,60 @@ public class Capitao extends JFrame {
      */
     private void $$$setupUI$$$() {
         capitaoRootPanel = new JPanel();
-        capitaoRootPanel.setLayout(new BorderLayout(0, 0));
+        capitaoRootPanel.setLayout(new FormLayout("fill:d:grow", "center:d:grow,top:4dlu:noGrow,center:max(d;4px):noGrow"));
+        fillFieldsPanel = new JPanel();
+        fillFieldsPanel.setLayout(new GridLayoutManager(1, 1, new Insets(20, 20, 10, 20), -1, -1));
+        CellConstraints cc = new CellConstraints();
+        capitaoRootPanel.add(fillFieldsPanel, cc.xy(1, 1));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(4, 8, new Insets(10, 10, 10, 10), -1, -1));
+        fillFieldsPanel.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        final JLabel label1 = new JLabel();
+        label1.setText("Capitão:");
+        panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        capitaoComboBox = new JComboBox();
+        panel1.add(capitaoComboBox, new GridConstraints(0, 1, 1, 7, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("Produto:");
+        panel1.add(label2, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JScrollPane scrollPane1 = new JScrollPane();
+        panel1.add(scrollPane1, new GridConstraints(2, 1, 2, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(40, -1), null, 0, false));
+        produtoList = new JList();
+        scrollPane1.setViewportView(produtoList);
+        final JSeparator separator1 = new JSeparator();
+        panel1.add(separator1, new GridConstraints(1, 0, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final JLabel label3 = new JLabel();
+        label3.setText("Comissão");
+        panel1.add(label3, new GridConstraints(2, 3, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        comissaoTextField = new JTextField();
+        panel1.add(comissaoTextField, new GridConstraints(2, 4, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        insertButton = new JButton();
+        insertButton.setText("Inserir");
+        panel1.add(insertButton, new GridConstraints(2, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(80, 40), new Dimension(80, 40), new Dimension(80, 40), 0, false));
+        final Spacer spacer1 = new Spacer();
+        panel1.add(spacer1, new GridConstraints(2, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        panel1.add(spacer2, new GridConstraints(2, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        limparCamposButton = new JButton();
+        limparCamposButton.setHorizontalTextPosition(11);
+        limparCamposButton.setText("Limpar");
+        panel1.add(limparCamposButton, new GridConstraints(3, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(80, 40), new Dimension(80, 40), new Dimension(80, 40), 0, false));
+        tableCapitaesPanel = new JPanel();
+        tableCapitaesPanel.setLayout(new GridLayoutManager(1, 1, new Insets(10, 20, 20, 20), -1, -1));
+        capitaoRootPanel.add(tableCapitaesPanel, cc.xy(1, 3));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 2, new Insets(10, 10, 10, 10), -1, -1));
+        tableCapitaesPanel.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        final JScrollPane scrollPane2 = new JScrollPane();
+        panel2.add(scrollPane2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        scrollPane2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Capitães", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        capitaesTable = new JTable();
+        scrollPane2.setViewportView(capitaesTable);
+        deleteButton = new JButton();
+        deleteButton.setText("Deletar");
+        panel2.add(deleteButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(90, 50), new Dimension(90, 50), new Dimension(90, 50), 0, false));
     }
 
     /**
@@ -57,4 +175,5 @@ public class Capitao extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return capitaoRootPanel;
     }
+
 }
