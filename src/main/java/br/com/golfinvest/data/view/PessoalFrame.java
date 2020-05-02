@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.ResourceUtils;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class Pessoal extends JFrame {
+public class PessoalFrame extends JFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel tableModel;
@@ -43,7 +44,7 @@ public class Pessoal extends JFrame {
     private JButton cancelButton;
     private JButton deleteButton;
 
-    public Pessoal(String title, JdbcTemplate jdbcTemplatePassed) {
+    public PessoalFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
         title = title + " - (Registro de pessoal no banco de dados)";
         setTitle(title);
@@ -322,6 +323,7 @@ public class Pessoal extends JFrame {
         westLabelPanel.setLayout(new GridLayoutManager(7, 1, new Insets(30, 10, 50, 5), -1, -1));
         westLabelPanel.setToolTipText("");
         pessoalRootPanel.add(westLabelPanel, BorderLayout.WEST);
+        westLabelPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.LEFT, TitledBorder.ABOVE_TOP, null, null));
         final JLabel label1 = new JLabel();
         label1.setText("Nome:");
         westLabelPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -354,6 +356,7 @@ public class Pessoal extends JFrame {
         centerTextPanel = new JPanel();
         centerTextPanel.setLayout(new GridLayoutManager(7, 1, new Insets(30, 0, 50, 20), -1, -1));
         pessoalRootPanel.add(centerTextPanel, BorderLayout.CENTER);
+        centerTextPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         nomeTextField = new JTextField();
         centerTextPanel.add(nomeTextField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         emailTextField = new JTextField();

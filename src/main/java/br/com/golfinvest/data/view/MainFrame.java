@@ -1,6 +1,5 @@
 package br.com.golfinvest.data.view;
 
-import br.com.golfinvest.data.config.SpringContext;
 import br.com.golfinvest.data.model.ActivationLogDAO;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -104,26 +103,29 @@ public class MainFrame extends JFrame {
                 fc.setCurrentDirectory(new File("."));
                 fc.setDialogTitle("Pasta do Banco de Dados a ser criado...");
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fc.showOpenDialog(mainFrameRootPanel);
-                String file = fc.getSelectedFile().getPath();
-                file = file + File.separator + "golf-data-manager.db";
-                try {
-                    openDataBase(file);
-                    JOptionPane.showMessageDialog(null, "Banco de dados criado com sucesso!", "Banco de dados", JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception ex) {
-                    buttonsPanel.setVisible(false);
-                    JOptionPane.showMessageDialog(null, ex.getCause(), "Problemas em criar o banco de dados", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                }
+                int result = fc.showOpenDialog(mainFrameRootPanel);
 
-                try {
-                    createTables();
-                    JOptionPane.showMessageDialog(null, "Tabelas e Triggers construídas com sucesso!", "Banco de dados - Schema", JOptionPane.INFORMATION_MESSAGE);
-                    buttonsPanel.setVisible(true);
-                } catch (FileNotFoundException ex) {
-                    buttonsPanel.setVisible(false);
-                    JOptionPane.showMessageDialog(null, ex.getCause(), "Banco de dados - Schema", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
+                if (result == 0) {
+                    String file = fc.getSelectedFile().getPath();
+                    file = file + File.separator + "golf-data-manager.db";
+                    try {
+                        openDataBase(file);
+                        JOptionPane.showMessageDialog(null, "Banco de dados criado com sucesso!", "Banco de dados", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        buttonsPanel.setVisible(false);
+                        JOptionPane.showMessageDialog(null, ex.getCause(), "Problemas em criar o banco de dados", JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
+                    }
+
+                    try {
+                        createTables();
+                        JOptionPane.showMessageDialog(null, "Tabelas e Triggers construídas com sucesso!", "Banco de dados - Schema", JOptionPane.INFORMATION_MESSAGE);
+                        buttonsPanel.setVisible(true);
+                    } catch (FileNotFoundException ex) {
+                        buttonsPanel.setVisible(false);
+                        JOptionPane.showMessageDialog(null, ex.getCause(), "Banco de dados - Schema", JOptionPane.ERROR_MESSAGE);
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -131,21 +133,21 @@ public class MainFrame extends JFrame {
         pessoalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Pessoal pessoal = new Pessoal(getTitle(), jdbcTemplate);
+                PessoalFrame pessoal = new PessoalFrame(getTitle(), jdbcTemplate);
             }
         });
 
         produtoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Produtos produto = new Produtos(getTitle(), jdbcTemplate);
+                ProdutosFrame produto = new ProdutosFrame(getTitle(), jdbcTemplate);
             }
         });
 
         capitaoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Capitao capitao = new Capitao(getTitle(), jdbcTemplate);
+                CapitaoFrame capitao = new CapitaoFrame(getTitle(), jdbcTemplate);
             }
         });
 

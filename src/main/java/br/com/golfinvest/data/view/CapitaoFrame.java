@@ -1,5 +1,6 @@
 package br.com.golfinvest.data.view;
 
+import br.com.golfinvest.data.model.*;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -9,13 +10,25 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
+import java.math.BigDecimal;
+import java.util.List;
 
-public class Capitao extends JFrame {
+public class CapitaoFrame extends JFrame {
 
     private JdbcTemplate jdbcTemplate;
+    DefaultTableModel capitaesTableModel;
+    String col[] = {"Capitão", "Produto", "Comissão"};
+    List<Capitao> capitaoList;
+    DefaultListModel produtoListModel;
+    DefaultComboBoxModel capitaoComboBoxModel;
+
+
     private JPanel capitaoRootPanel;
     private JPanel fillFieldsPanel;
     private JPanel tableCapitaesPanel;
@@ -27,7 +40,7 @@ public class Capitao extends JFrame {
     private JButton deleteButton;
     private JButton limparCamposButton;
 
-    public Capitao(String title, JdbcTemplate jdbcTemplatePassed) {
+    public CapitaoFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
         title = title + " - (Registro de capitão de produto)";
         setTitle(title);
@@ -41,8 +54,13 @@ public class Capitao extends JFrame {
     }
 
     public void initComponents() {
-        System.out.println("Init Components Capitao...");
+        System.out.println("Init Components CapitaoFrame...");
         setContentPane(capitaoRootPanel);
+        produtoListModel = new DefaultListModel();
+        produtoList.setModel(produtoListModel);
+
+        capitaoComboBoxModel = new DefaultComboBoxModel();
+        capitaoComboBox.setModel(capitaoComboBoxModel);
 
         iniciarTabelaCapitaes();
         fillProdutoList();
@@ -67,17 +85,122 @@ public class Capitao extends JFrame {
             }
         });
 
+        limparCamposButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limparCampos();
+            }
+        });
+
+        capitaesTable.addContainerListener(new ContainerAdapter() {
+            @Override
+            public void componentAdded(ContainerEvent e) {
+                super.componentAdded(e);
+                //System.out.println("Someone is editing me!");
+                iniciarTabelaCapitaes();
+            }
+        });
+
     }
 
     public void inserirCapitao() {
+        if (capitaoComboBox.getSelectedIndex() < 0 || produtoList.isSelectionEmpty() || comissaoTextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Os campos Capitão, Produto e Comissão são obrigatórios.", "Preencher os dados", JOptionPane.WARNING_MESSAGE);
+        } else {
+            String capitao = capitaoComboBox.getSelectedItem().toString();
+            String produto = produtoList.getSelectedValue().toString();
 
+//            String comissaoString = comissaoTextField.getText().replaceAll(",", ".");
+//            BigDecimal comissao = new BigDecimal(comissaoString);
+//            System.out.println("Capitao: " + capitao + "Produto: " + produto + "Comissao: " + comissao);
+
+//            throw new BaseException(Errors.INVALID_NUMBER_FORMAT.getDescription(comissaoTextField.getText()));
+
+            //Get pessoal id
+            String sql = "SELECT id FROM pessoal WHERE nome=?";
+            int id_pessoal = (Integer) jdbcTemplate.queryForObject(
+                    sql, new Object[]{capitao}, Integer.class);
+            //Get produto id
+            sql = "SELECT id FROM produto WHERE nome=?";
+            int id_produto = (Integer) jdbcTemplate.queryForObject(
+                    sql, new Object[]{produto}, Integer.class);
+            //Add Capitao
+            try {
+                String comissaoString = comissaoTextField.getText().replaceAll(",", ".");
+                BigDecimal comissao = new BigDecimal(comissaoString);
+                System.out.println("Capitao: " + capitao + "Produto: " + produto + "Comissao: " + comissao);
+
+                sql = "INSERT INTO produto_capitao (id_produto, id_pessoal, comissao) VALUES(" + id_produto + "," + id_pessoal + "," + comissao + ")";
+                jdbcTemplate.execute(sql);
+                limparCampos();
+                iniciarTabelaCapitaes();
+            } catch (Exception e) {
+                System.out.println("Mensagem de erro: " + e.getCause());
+                JOptionPane.showMessageDialog(null, e.getCause(), "Erro inserindo no BD", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
     }
 
+
     public void deletarCapitao() {
+        if (capitaesTable.getSelectedRow() > -1) {
+
+            int[] rList = capitaesTable.getSelectedRows();
+            String message;
+
+            if (rList.length > 1) {
+                message = "Tem certeza que deseja deletar todas as " + rList.length + " linhas selecionadas?";
+            } else {
+                message = "Tem certeza que deseja deletar a linha selecionada?";
+            }
+
+            int reply = JOptionPane.showConfirmDialog(null, message, "Deletando informações", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+
+                for (int i = 0; i < rList.length; i++) {
+                    System.out.println("DELETANDO... " + rList[i]);
+
+                    int r = rList[i]; //table1.getSelectedRow();
+                    int editingId = capitaoList.get(r).getId();
+
+                    System.out.println("Delete iniciada para: " + capitaoList.get(r).getNomeProduto() + " Row: " + r);
+                    System.out.println("Delete iniciada para Id: " + capitaoList.get(r).getId());
+
+                    String sql = "DELETE FROM produto_capitao WHERE id = " + editingId;
+                    try {
+                        jdbcTemplate.execute(sql);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, e.getCause(), "Erro ao deletar", JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                        return;
+                    }
+
+                }
+                limparCampos();
+                iniciarTabelaCapitaes();
+                JOptionPane.showMessageDialog(null, "Informações deletadas com sucesso", "Deletado", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Para deletar é necessário selecionar a tabela antes.", "Selecione antes", JOptionPane.WARNING_MESSAGE);
+        }
 
     }
 
     public void iniciarTabelaCapitaes() {
+        String sql = "SELECT a.id, a.id_produto, b.nome 'nome_produto', a.id_pessoal, c.nome 'nome_pessoal', a.comissao FROM produto_capitao a JOIN produto b ON a.id_produto=b.id JOIN pessoal c ON a.id_pessoal=c.id;";
+        capitaoList = jdbcTemplate.query(sql, (rs, rowNum) -> new Capitao(rs.getInt("id"), rs.getInt("id_produto"), rs.getString("nome_produto"), rs.getInt("id_pessoal"), rs.getString("nome_pessoal"), rs.getBigDecimal("comissao")));
+
+        capitaesTableModel = new DefaultTableModel(col, 0);
+        capitaesTable.setModel(capitaesTableModel);
+
+        capitaoList.forEach(capitao -> {
+            System.out.println(capitao.getNomePessoal());
+            Object[] object = {capitao.getNomePessoal(), capitao.getNomeProduto(), capitao.getComissao()};
+            capitaesTableModel.addRow(object);
+        });
 
     }
 
@@ -90,10 +213,18 @@ public class Capitao extends JFrame {
     }
 
     public void fillCapitaoComboBox() {
-
+        String sql = "SELECT * from PESSOAL;";
+        List<Pessoa> pessoas = jdbcTemplate.query(sql, (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta")));
+        pessoas.forEach(pessoa -> capitaoComboBoxModel.addElement(pessoa.getNome()));
+        capitaoComboBox.setSelectedItem(null);
     }
 
     public void fillProdutoList() {
+        produtoListModel.clear();
+        String sql = "SELECT nome FROM produto;";
+        List<String> itensTag;
+        itensTag = jdbcTemplate.query(sql, (rs, rowNum) -> new String(rs.getString("nome")));
+        itensTag.forEach(tag -> produtoListModel.addElement(tag));
 
     }
 
@@ -175,5 +306,4 @@ public class Capitao extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return capitaoRootPanel;
     }
-
 }
