@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS pessoal;
-CREATE TABLE pessoal (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) UNIQUE, email VARCHAR(100) UNIQUE, cpf VARCHAR(15) UNIQUE, codigo_assessor VARCHAR(10) UNIQUE, codigo_banco INTEGER, agencia VARCHAR(50), conta VARCHAR(50));
+CREATE TABLE pessoal (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) UNIQUE, email VARCHAR(100) UNIQUE, cpf VARCHAR(15) UNIQUE, codigo_assessor VARCHAR(10) UNIQUE, codigo_banco INTEGER, agencia VARCHAR(50), conta VARCHAR(50), dv VARCHAR(3));
 DROP TRIGGER IF EXISTS pessoal_insert_cod_assessor;
 CREATE TRIGGER IF NOT EXISTS pessoal_insert_cod_assessor AFTER INSERT ON pessoal WHEN NEW.codigo_assessor ISNULL OR NEW.codigo_assessor = '' OR upper(substr(NEW.codigo_assessor,1,1)) <> 'A' BEGIN UPDATE pessoal SET codigo_assessor = ('P' || (SELECT ifnull((SELECT seq FROM sqlite_sequence WHERE name = 'pessoal'),0) +1)) WHERE id = NEW.id; END;
 DROP TRIGGER IF EXISTS pessoal_update_cod_assessor;

@@ -9,8 +9,9 @@ public class Pessoa {
     private int codigoBanco;
     private String agencia;
     private String conta;
+    private String dv;
 
-    public Pessoa(int id, String nome, String email, String cpf, String codigoAssessor, int codigoBanco, String agencia, String conta){
+    public Pessoa(int id, String nome, String email, String cpf, String codigoAssessor, int codigoBanco, String agencia, String conta, String dv){
         this.id=id;
         this.nome=nome;
         this.email=email;
@@ -19,6 +20,7 @@ public class Pessoa {
         this.codigoBanco=codigoBanco;
         this.agencia=agencia;
         this.conta=conta;
+        this.dv=dv;
     }
 
     public int getId() {
@@ -83,5 +85,13 @@ public class Pessoa {
 
     public void setConta(String conta) {
         this.conta = conta;
+    }
+
+    public String getDv() {
+        return dv;
+    }
+
+    public void setDv(String dv) {
+        this.dv = dv;
     }
 }
