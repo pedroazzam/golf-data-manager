@@ -160,9 +160,9 @@ public class MainFrame extends JFrame {
         setTitle(title + " [...aguarde...]");
         System.out.println("Validating credential...");
         ActivationLogDAO ald = new ActivationLogDAO(aws, user, pass);
-//        boolean valid = true;
-        boolean valid = ald.validateCredential("golf");
-        ald.logRegister(valid);
+        boolean valid = true;
+//        boolean valid = ald.validateCredential("golf");
+//        ald.logRegister(valid);
 
         if (valid) {
             openDBButon.setEnabled(true);

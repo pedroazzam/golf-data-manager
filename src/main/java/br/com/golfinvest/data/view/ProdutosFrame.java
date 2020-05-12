@@ -89,6 +89,8 @@ public class ProdutosFrame extends JFrame {
         tagN2List.setModel(tagN2ListModel);
         tagN3List.setModel(tagN3ListModel);
 
+        inserirTesteButton.setVisible(false); // Disable button to insert test data
+
         buttonsFromListsOFF();
 
         setVisible(true);
