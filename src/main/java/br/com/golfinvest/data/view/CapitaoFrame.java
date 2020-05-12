@@ -214,7 +214,7 @@ public class CapitaoFrame extends JFrame {
 
     public void fillCapitaoComboBox() {
         String sql = "SELECT * from PESSOAL;";
-        List<Pessoa> pessoas = jdbcTemplate.query(sql, (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta")));
+        List<Pessoa> pessoas = jdbcTemplate.query(sql, (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv")));
         pessoas.forEach(pessoa -> capitaoComboBoxModel.addElement(pessoa.getNome()));
         capitaoComboBox.setSelectedItem(null);
     }

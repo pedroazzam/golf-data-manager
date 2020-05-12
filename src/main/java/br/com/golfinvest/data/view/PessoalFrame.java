@@ -5,7 +5,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.ResourceUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -14,14 +13,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
 
 public class PessoalFrame extends JFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel tableModel;
-    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "Cod Banco", "Agência", "Conta"};
+    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "Cod Banco", "Agência", "Conta", "dv"};
     List<Pessoa> pessoas;
     int editingId;
 
@@ -43,6 +40,7 @@ public class PessoalFrame extends JFrame {
     private JButton insertButton;
     private JButton cancelButton;
     private JButton deleteButton;
+    private JTextField dvTextField;
 
     public PessoalFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
@@ -150,14 +148,14 @@ public class PessoalFrame extends JFrame {
 
     public void preencherTabelaSelectAll() {
 
-        pessoas = jdbcTemplate.query("SELECT * FROM pessoal", (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta")));
+        pessoas = jdbcTemplate.query("SELECT * FROM pessoal", (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv")));
 
         tableModel = new DefaultTableModel(col, 0);
         table1.setModel(tableModel);
 
         pessoas.forEach(pessoa -> {
             System.out.println(pessoa.getNome());
-            Object[] object = {pessoa.getNome(), pessoa.getEmail(), pessoa.getCpf(), pessoa.getCodigoAssessor(), pessoa.getCodigoBanco(), pessoa.getAgencia(), pessoa.getConta()};
+            Object[] object = {pessoa.getNome(), pessoa.getEmail(), pessoa.getCpf(), pessoa.getCodigoAssessor(), pessoa.getCodigoBanco(), pessoa.getAgencia(), pessoa.getConta(), pessoa.getDv()};
             tableModel.addRow(object);
         });
     }
@@ -170,6 +168,7 @@ public class PessoalFrame extends JFrame {
         codBancoTextField.setText("");
         agenciaTextField.setText("");
         contaTextField.setText("");
+        dvTextField.setText("");
     }
 
     public void editarPessoal() {
@@ -189,6 +188,7 @@ public class PessoalFrame extends JFrame {
                 codBancoTextField.setText(tableModel.getValueAt(r, 4).toString());
                 agenciaTextField.setText(tableModel.getValueAt(r, 5).toString());
                 contaTextField.setText(tableModel.getValueAt(r, 6).toString());
+                dvTextField.setText(tableModel.getValueAt(r, 7).toString());
                 editButton.setText("Completar edição");
                 insertButton.setEnabled(false);
             } else {
@@ -203,7 +203,8 @@ public class PessoalFrame extends JFrame {
             sql = sql + "codigo_assessor = '" + codAssessorTextField.getText() + "', ";
             sql = sql + "codigo_banco = '" + codBancoTextField.getText() + "', ";
             sql = sql + "agencia = '" + agenciaTextField.getText() + "', ";
-            sql = sql + "conta = '" + contaTextField.getText() + "' ";
+            sql = sql + "conta = '" + contaTextField.getText() + "', ";
+            sql = sql + "dv = '" + dvTextField.getText() + "' ";
             sql = sql + "WHERE id = " + editingId;
             System.out.println("Executando: " + sql);
 
@@ -281,14 +282,15 @@ public class PessoalFrame extends JFrame {
         if (nomeTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || cpfTextField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nome, E-Mail e CPF são dados obrigatórios.", "Preencher os dados", JOptionPane.WARNING_MESSAGE);
         } else {
-            String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta) VALUES( ";
+            String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta, dv) VALUES( ";
             sql = sql + "'" + nomeTextField.getText() + "', ";
             sql = sql + "'" + emailTextField.getText() + "', ";
             sql = sql + "'" + cpfTextField.getText() + "', ";
             sql = sql + "'" + codAssessorTextField.getText() + "', ";
             sql = sql + "'" + codBancoTextField.getText() + "', ";
             sql = sql + "'" + agenciaTextField.getText() + "', ";
-            sql = sql + "'" + contaTextField.getText() + "');";
+            sql = sql + "'" + contaTextField.getText() + "', ";
+            sql = sql + "'" + dvTextField.getText() + "');";
             try {
                 jdbcTemplate.execute(sql);
                 limparCampos();
@@ -355,23 +357,28 @@ public class PessoalFrame extends JFrame {
         table1.setAutoResizeMode(4);
         scrollPane1.setViewportView(table1);
         centerTextPanel = new JPanel();
-        centerTextPanel.setLayout(new GridLayoutManager(7, 1, new Insets(30, 0, 50, 20), -1, -1));
+        centerTextPanel.setLayout(new GridLayoutManager(7, 3, new Insets(30, 0, 50, 20), -1, -1));
         pessoalRootPanel.add(centerTextPanel, BorderLayout.CENTER);
         centerTextPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         nomeTextField = new JTextField();
-        centerTextPanel.add(nomeTextField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(nomeTextField, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         emailTextField = new JTextField();
-        centerTextPanel.add(emailTextField, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(emailTextField, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         cpfTextField = new JTextField();
-        centerTextPanel.add(cpfTextField, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(cpfTextField, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         codAssessorTextField = new JTextField();
-        centerTextPanel.add(codAssessorTextField, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(codAssessorTextField, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         codBancoTextField = new JTextField();
-        centerTextPanel.add(codBancoTextField, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(codBancoTextField, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         agenciaTextField = new JTextField();
-        centerTextPanel.add(agenciaTextField, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(agenciaTextField, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         contaTextField = new JTextField();
         centerTextPanel.add(contaTextField, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dvTextField = new JTextField();
+        centerTextPanel.add(dvTextField, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        final JLabel label8 = new JLabel();
+        label8.setText("DV:");
+        centerTextPanel.add(label8, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         southButtonPanel = new JPanel();
         southButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         pessoalRootPanel.add(southButtonPanel, BorderLayout.SOUTH);
@@ -398,4 +405,5 @@ public class PessoalFrame extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return pessoalRootPanel;
     }
+
 }
