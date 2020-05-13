@@ -18,6 +18,10 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 public class MainFrame extends JFrame {
+    private PessoalFrame pessoal;
+    private ProdutosFrame produto;
+    private CapitaoFrame capitao;
+
     private JPanel mainFrameRootPanel;
     private JButton openDBButon;
     private JTextField dbAddressTextField;
@@ -28,6 +32,8 @@ public class MainFrame extends JFrame {
     private JButton pessoalButton;
     private JButton produtoButton;
     private JButton capitaoButton;
+    private JPanel contentPanel;
+    private JButton sairButton;
     String aws;
     String user;
     String pass;
@@ -47,7 +53,7 @@ public class MainFrame extends JFrame {
 
     public void initComponents() {
 
-        setSize(640, 480);
+        setSize(1300, 900);
 
 
         System.out.println("Init Components MainFrame...");
@@ -64,10 +70,11 @@ public class MainFrame extends JFrame {
         buttonsPanel.setVisible(false);
         setLocationRelativeTo(null);
         regEvents();
+
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         setVisible(true);
 
         credentialValidation();
-
     }
 
 
@@ -133,21 +140,55 @@ public class MainFrame extends JFrame {
         pessoalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PessoalFrame pessoal = new PessoalFrame(getTitle(), jdbcTemplate);
+                if (pessoal == null || pessoal.isClosed()) {
+                    pessoal = new PessoalFrame(getTitle(), jdbcTemplate);
+
+                    Dimension contentPaneSize = getContentPane().getSize();
+                    Dimension jInternalFrameSize = pessoal.getSize();
+                    pessoal.setLocation((contentPaneSize.width - jInternalFrameSize.width) / 3,
+                            (contentPaneSize.height - jInternalFrameSize.height) / 3);
+
+                    contentPanel.add(pessoal);
+                }
             }
         });
 
         produtoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ProdutosFrame produto = new ProdutosFrame(getTitle(), jdbcTemplate);
+                if (produto == null || produto.isClosed()) {
+                    produto = new ProdutosFrame(getTitle(), jdbcTemplate);
+
+                    Dimension contentPaneSize = getContentPane().getSize();
+                    Dimension jInternalFrameSize = produto.getSize();
+                    produto.setLocation((contentPaneSize.width - jInternalFrameSize.width) / 3,
+                            (contentPaneSize.height - jInternalFrameSize.height) / 3);
+
+                    contentPanel.add(produto);
+                }
             }
         });
 
         capitaoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CapitaoFrame capitao = new CapitaoFrame(getTitle(), jdbcTemplate);
+                if (capitao == null || capitao.isClosed()) {
+                    capitao = new CapitaoFrame(getTitle(), jdbcTemplate);
+
+                    Dimension contentPaneSize = getContentPane().getSize();
+                    Dimension jInternalFrameSize = capitao.getSize();
+                    capitao.setLocation((contentPaneSize.width - jInternalFrameSize.width) / 3,
+                            (contentPaneSize.height - jInternalFrameSize.height) / 3);
+
+                    contentPanel.add(capitao);
+                }
+            }
+        });
+
+        sairButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 
@@ -250,48 +291,65 @@ public class MainFrame extends JFrame {
         mainFrameRootPanel = new JPanel();
         mainFrameRootPanel.setLayout(new BorderLayout(0, 0));
         dbPanel = new JPanel();
-        dbPanel.setLayout(new GridLayoutManager(2, 2, new Insets(10, 10, 10, 10), -1, -1));
+        dbPanel.setLayout(new GridLayoutManager(2, 2, new Insets(20, 20, 10, 20), -1, -1));
+        dbPanel.setBackground(new Color(-262193));
         mainFrameRootPanel.add(dbPanel, BorderLayout.NORTH);
         dbPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         openDBButon = new JButton();
-        Font openDBButonFont = this.$$$getFont$$$(null, Font.BOLD, -1, openDBButon.getFont());
+        Font openDBButonFont = this.$$$getFont$$$(null, Font.BOLD, 16, openDBButon.getFont());
         if (openDBButonFont != null) openDBButon.setFont(openDBButonFont);
         openDBButon.setText("Abrir Banco de Dados");
-        dbPanel.add(openDBButon, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dbPanel.add(openDBButon, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         dbAddressTextField = new JTextField();
         dbAddressTextField.setBackground(new Color(-3879731));
-        Font dbAddressTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, dbAddressTextField.getFont());
+        Font dbAddressTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, 18, dbAddressTextField.getFont());
         if (dbAddressTextFieldFont != null) dbAddressTextField.setFont(dbAddressTextFieldFont);
-        dbPanel.add(dbAddressTextField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dbPanel.add(dbAddressTextField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         createDBButton = new JButton();
-        Font createDBButtonFont = this.$$$getFont$$$(null, Font.BOLD, -1, createDBButton.getFont());
+        Font createDBButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, createDBButton.getFont());
         if (createDBButtonFont != null) createDBButton.setFont(createDBButtonFont);
         createDBButton.setText("Criar Banco de Dados");
-        dbPanel.add(createDBButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dbPanel.add(createDBButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 50, 50, 50), -1, -1));
-        mainFrameRootPanel.add(buttonsPanel, BorderLayout.CENTER);
+        buttonsPanel.setLayout(new GridLayoutManager(7, 2, new Insets(30, 50, 20, 50), -1, -1));
+        buttonsPanel.setBackground(new Color(-15530905));
+        mainFrameRootPanel.add(buttonsPanel, BorderLayout.WEST);
         buttonsPanelLabel = new JLabel();
-        Font buttonsPanelLabelFont = this.$$$getFont$$$(null, Font.BOLD, 18, buttonsPanelLabel.getFont());
+        buttonsPanelLabel.setBackground(new Color(-918273));
+        Font buttonsPanelLabelFont = this.$$$getFont$$$(null, Font.BOLD, 26, buttonsPanelLabel.getFont());
         if (buttonsPanelLabelFont != null) buttonsPanelLabel.setFont(buttonsPanelLabelFont);
+        buttonsPanelLabel.setForeground(new Color(-918273));
         buttonsPanelLabel.setHorizontalAlignment(0);
-        buttonsPanelLabel.setText("Escolha a informação a ser preenchida no banco de dados");
-        buttonsPanel.add(buttonsPanelLabel, new GridConstraints(0, 0, 6, 2, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buttonsPanelLabel.setText("Ações");
+        buttonsPanel.add(buttonsPanelLabel, new GridConstraints(0, 0, 7, 2, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         pessoalButton = new JButton();
         Font pessoalButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, pessoalButton.getFont());
         if (pessoalButtonFont != null) pessoalButton.setFont(pessoalButtonFont);
+        pessoalButton.setIcon(new ImageIcon(getClass().getResource("/people-100x100.png")));
         pessoalButton.setText("Pessoal/Assessores");
         buttonsPanel.add(pessoalButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         produtoButton = new JButton();
         Font produtoButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, produtoButton.getFont());
         if (produtoButtonFont != null) produtoButton.setFont(produtoButtonFont);
+        produtoButton.setIcon(new ImageIcon(getClass().getResource("/product-100x100.png")));
         produtoButton.setText("Produto");
         buttonsPanel.add(produtoButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         capitaoButton = new JButton();
         Font capitaoButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, capitaoButton.getFont());
         if (capitaoButtonFont != null) capitaoButton.setFont(capitaoButtonFont);
+        capitaoButton.setIcon(new ImageIcon(getClass().getResource("/po-100x100.png")));
         capitaoButton.setText("Capitão");
-        buttonsPanel.add(capitaoButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buttonsPanel.add(capitaoButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(98, 31), null, 0, false));
+        sairButton = new JButton();
+        Font sairButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, sairButton.getFont());
+        if (sairButtonFont != null) sairButton.setFont(sairButtonFont);
+        sairButton.setIcon(new ImageIcon(getClass().getResource("/exit-100x100.png")));
+        sairButton.setText("Sair");
+        buttonsPanel.add(sairButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel.setBackground(new Color(-16777216));
+        mainFrameRootPanel.add(contentPanel, BorderLayout.CENTER);
     }
 
     /**
@@ -319,4 +377,5 @@ public class MainFrame extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return mainFrameRootPanel;
     }
+
 }
