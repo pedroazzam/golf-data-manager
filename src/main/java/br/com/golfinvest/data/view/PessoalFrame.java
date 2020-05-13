@@ -14,7 +14,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.List;
 
-public class PessoalFrame extends JFrame {
+public class PessoalFrame extends JInternalFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel tableModel;
@@ -67,12 +67,18 @@ public class PessoalFrame extends JFrame {
 //                middle.y - (getHeight() / 2));
 //        setLocation(newLocation);
 
+
         insertTestButton.setVisible(false); // Disable button to insert test data
 
         tableModel = new DefaultTableModel(col, 0);
         table1.setModel(tableModel);
 
         table1.setRowSelectionAllowed(true);
+
+        setMaximizable(true); // maximize
+//        setIconifiable(true); // set minimize
+        setClosable(true); // set closed
+//        setResizable(true); // set resizable
 
         setVisible(true);
         preencherTabelaSelectAll();

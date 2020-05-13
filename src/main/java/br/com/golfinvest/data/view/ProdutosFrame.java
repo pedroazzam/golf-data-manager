@@ -18,7 +18,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
-public class ProdutosFrame extends JFrame {
+public class ProdutosFrame extends JInternalFrame {
 
     private JdbcTemplate jdbcTemplate;
     List<Produto> produtos;
@@ -92,6 +92,11 @@ public class ProdutosFrame extends JFrame {
         inserirTesteButton.setVisible(false); // Disable button to insert test data
 
         buttonsFromListsOFF();
+
+        setMaximizable(true); // maximize
+//        setIconifiable(true); // set minimize
+        setClosable(true); // set closed
+//        setResizable(true); // set resizable
 
         setVisible(true);
         preencherTabelaSelectAll();

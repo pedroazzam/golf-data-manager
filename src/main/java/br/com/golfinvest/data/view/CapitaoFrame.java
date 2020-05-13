@@ -19,7 +19,7 @@ import java.awt.event.ContainerEvent;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class CapitaoFrame extends JFrame {
+public class CapitaoFrame extends JInternalFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel capitaesTableModel;
@@ -65,6 +65,11 @@ public class CapitaoFrame extends JFrame {
         iniciarTabelaCapitaes();
         fillProdutoList();
         fillCapitaoComboBox();
+
+        setMaximizable(true); // maximize
+//        setIconifiable(true); // set minimize
+        setClosable(true); // set closed
+//        setResizable(true); // set resizable
 
         setVisible(true);
     }
