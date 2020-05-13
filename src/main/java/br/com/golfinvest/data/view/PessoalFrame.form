@@ -181,6 +181,12 @@
         <properties/>
         <border type="none"/>
         <children>
+          <component id="359d4" class="javax.swing.JButton" binding="inserirEmMassaButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Inserir em Massa"/>
+            </properties>
+          </component>
           <component id="9c839" class="javax.swing.JButton" binding="insertTestButton">
             <constraints/>
             <properties>

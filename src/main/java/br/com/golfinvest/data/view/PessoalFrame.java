@@ -41,6 +41,7 @@ public class PessoalFrame extends JFrame {
     private JButton cancelButton;
     private JButton deleteButton;
     private JTextField dvTextField;
+    private JButton inserirEmMassaButton;
 
     public PessoalFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
@@ -51,10 +52,11 @@ public class PessoalFrame extends JFrame {
 
         initComponents();
         regEvents();
+
     }
 
     public void initComponents() {
-        System.out.println("Init Components MainFrame...");
+        System.out.println("Init Components PessoalFrame...");
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(pessoalRootPanel);
 //        setLocationRelativeTo(null);
@@ -140,6 +142,13 @@ public class PessoalFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deletarPessoal();
+            }
+        });
+
+        inserirEmMassaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PessoalMassAdd pessoalMassAdd = new PessoalMassAdd(getTitle(), jdbcTemplate);
             }
         });
 
@@ -382,6 +391,9 @@ public class PessoalFrame extends JFrame {
         southButtonPanel = new JPanel();
         southButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         pessoalRootPanel.add(southButtonPanel, BorderLayout.SOUTH);
+        inserirEmMassaButton = new JButton();
+        inserirEmMassaButton.setText("Inserir em Massa");
+        southButtonPanel.add(inserirEmMassaButton);
         insertTestButton = new JButton();
         insertTestButton.setText("Inserir Teste");
         southButtonPanel.add(insertTestButton);
