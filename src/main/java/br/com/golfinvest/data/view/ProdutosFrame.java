@@ -96,7 +96,7 @@ public class ProdutosFrame extends JInternalFrame {
         setMaximizable(true); // maximize
 //        setIconifiable(true); // set minimize
         setClosable(true); // set closed
-//        setResizable(true); // set resizable
+        setResizable(true); // set resizable
 
         setVisible(true);
         preencherTabelaSelectAll();
@@ -501,8 +501,11 @@ public class ProdutosFrame extends JInternalFrame {
         produtoRootPanel.add(principalPanel, "Card1");
         southButtonPanel = new JPanel();
         southButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        southButtonPanel.setBackground(new Color(-10461088));
         principalPanel.add(southButtonPanel, BorderLayout.SOUTH);
         inserirTesteButton = new JButton();
+        Font inserirTesteButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, inserirTesteButton.getFont());
+        if (inserirTesteButtonFont != null) inserirTesteButton.setFont(inserirTesteButtonFont);
         inserirTesteButton.setText("Inserir Teste");
         southButtonPanel.add(inserirTesteButton);
         insertButton = new JButton();
@@ -536,22 +539,26 @@ public class ProdutosFrame extends JInternalFrame {
         centerSplitPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         rightSplittedPanel = new JPanel();
         rightSplittedPanel.setLayout(new CardLayout(0, 0));
+        rightSplittedPanel.setBackground(new Color(-8679521));
         centerSplitPanel.setRightComponent(rightSplittedPanel);
-        rightSplittedPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), "Produtos Registrados", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, this.$$$getFont$$$(null, Font.BOLD, 16, rightSplittedPanel.getFont()), null));
+        rightSplittedPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), "Produtos Registrados", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, this.$$$getFont$$$(null, Font.BOLD, 16, rightSplittedPanel.getFont()), new Color(-1)));
         final JScrollPane scrollPane1 = new JScrollPane();
         rightSplittedPanel.add(scrollPane1, "Card1");
         produtosTable = new JTable();
         scrollPane1.setViewportView(produtosTable);
         leftSplittedPanel = new JPanel();
         leftSplittedPanel.setLayout(new BorderLayout(0, 0));
+        leftSplittedPanel.setBackground(new Color(-8679521));
         centerSplitPanel.setLeftComponent(leftSplittedPanel);
-        leftSplittedPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), "Registro de Produtos", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, this.$$$getFont$$$(null, Font.BOLD, 16, leftSplittedPanel.getFont()), null));
+        leftSplittedPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), "Registro de Produtos", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, this.$$$getFont$$$(null, Font.BOLD, 16, leftSplittedPanel.getFont()), new Color(-1)));
         topLeftPanel = new JPanel();
         topLeftPanel.setLayout(new GridLayoutManager(1, 2, new Insets(20, 20, 20, 10), -1, -1));
+        topLeftPanel.setBackground(new Color(-8679521));
         leftSplittedPanel.add(topLeftPanel, BorderLayout.NORTH);
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$(null, Font.BOLD, 18, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
+        label1.setForeground(new Color(-1));
         label1.setText("Nome do Produto: *");
         topLeftPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         nomeProdutoTextField = new JTextField();
@@ -560,6 +567,7 @@ public class ProdutosFrame extends JInternalFrame {
         topLeftPanel.add(nomeProdutoTextField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         eastLeftPanel = new JPanel();
         eastLeftPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        eastLeftPanel.setBackground(new Color(-8679521));
         leftSplittedPanel.add(eastLeftPanel, BorderLayout.EAST);
         final Spacer spacer1 = new Spacer();
         eastLeftPanel.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
@@ -567,16 +575,19 @@ public class ProdutosFrame extends JInternalFrame {
         eastLeftPanel.add(spacer2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         centerLeftPanel = new JPanel();
         centerLeftPanel.setLayout(new GridLayoutManager(4, 4, new Insets(0, 20, 10, 10), -1, -1));
+        centerLeftPanel.setBackground(new Color(-8679521));
         leftSplittedPanel.add(centerLeftPanel, BorderLayout.CENTER);
         final JScrollPane scrollPane2 = new JScrollPane();
-        centerLeftPanel.add(scrollPane2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        scrollPane2.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Produto*", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP, null, null));
+        scrollPane2.setBackground(new Color(-8679521));
+        centerLeftPanel.add(scrollPane2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        scrollPane2.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Produto*", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.TOP, this.$$$getFont$$$(null, -1, -1, scrollPane2.getFont()), new Color(-1)));
         tagProdList = new JList();
         tagProdList.setBackground(new Color(-262193));
         scrollPane2.setViewportView(tagProdList);
         final JScrollPane scrollPane3 = new JScrollPane();
+        scrollPane3.setBackground(new Color(-8679521));
         centerLeftPanel.add(scrollPane3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        scrollPane3.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Nível 2", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        scrollPane3.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Nível 2", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-1)));
         tagN2List = new JList();
         tagN2List.setBackground(new Color(-918273));
         scrollPane3.setViewportView(tagN2List);
@@ -605,8 +616,9 @@ public class ProdutosFrame extends JInternalFrame {
         tagProdTextField.setToolTipText("Insira a Tag aqui e clique em adicionar");
         centerLeftPanel.add(tagProdTextField, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JScrollPane scrollPane4 = new JScrollPane();
+        scrollPane4.setBackground(new Color(-8679521));
         centerLeftPanel.add(scrollPane4, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        scrollPane4.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Nível 1", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        scrollPane4.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Nível 1", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, this.$$$getFont$$$(null, -1, -1, scrollPane4.getFont()), new Color(-1)));
         tagN1List = new JList();
         tagN1List.setBackground(new Color(-918273));
         scrollPane4.setViewportView(tagN1List);
@@ -623,8 +635,9 @@ public class ProdutosFrame extends JInternalFrame {
         tagN1AddButton.setText("Adicionar");
         centerLeftPanel.add(tagN1AddButton, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane5 = new JScrollPane();
+        scrollPane5.setBackground(new Color(-8679521));
         centerLeftPanel.add(scrollPane5, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        scrollPane5.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Nível 3", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        scrollPane5.setBorder(BorderFactory.createTitledBorder(null, "Lista Tags Coluna Nível 3", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-1)));
         tagN3List = new JList();
         tagN3List.setBackground(new Color(-918273));
         scrollPane5.setViewportView(tagN3List);
@@ -667,4 +680,5 @@ public class ProdutosFrame extends JInternalFrame {
     public JComponent $$$getRootComponent$$$() {
         return produtoRootPanel;
     }
+
 }

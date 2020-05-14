@@ -3,6 +3,7 @@ package br.com.golfinvest.data.view;
 import br.com.golfinvest.data.model.ActivationLogDAO;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.core.io.ClassPathResource;
@@ -15,7 +16,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class MainFrame extends JFrame {
     private PessoalFrame pessoal;
@@ -28,15 +33,19 @@ public class MainFrame extends JFrame {
     private JButton createDBButton;
     private JPanel dbPanel;
     private JPanel buttonsPanel;
-    private JLabel buttonsPanelLabel;
     private JButton pessoalButton;
     private JButton produtoButton;
     private JButton capitaoButton;
     private JPanel contentPanel;
     private JButton sairButton;
+    private JLabel byEmailLabel;
+    private JLabel byWebLabel;
+    private JPanel contactPanel;
     String aws;
     String user;
     String pass;
+    private String emailAddress = "pedro@pedroazzam.me";
+    private String webAddress = "https://pedroazzam.me/";
 
 
     @Autowired
@@ -70,6 +79,38 @@ public class MainFrame extends JFrame {
         buttonsPanel.setVisible(false);
         setLocationRelativeTo(null);
         regEvents();
+
+        // Setting image icon
+        Image imgDB = new ImageIcon(
+                this.getClass().getResource("/db.png")).getImage();
+        setIconImage(imgDB);
+
+        //Developed by
+        byWebLabel.setText("<html><a href=" + webAddress + " style=color:rgb(0,0,0);>pedroazzam.me</a></html>");
+        byWebLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        byWebLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(webAddress));
+                } catch (URISyntaxException | IOException ex) {
+                    // ...
+                }
+            }
+        });
+
+        byEmailLabel.setText("<html><a href=# style=color:rgb(0,0,0);>" + emailAddress + "</a></html>");
+        byEmailLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        byEmailLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().mail(new URI("mailto:" + emailAddress + "?subject=Contact"));
+                } catch (URISyntaxException | IOException ex) {
+                    // ...
+                }
+            }
+        });
 
         setExtendedState(Frame.MAXIMIZED_BOTH);
         setVisible(true);
@@ -292,7 +333,7 @@ public class MainFrame extends JFrame {
         mainFrameRootPanel.setLayout(new BorderLayout(0, 0));
         dbPanel = new JPanel();
         dbPanel.setLayout(new GridLayoutManager(2, 2, new Insets(20, 20, 10, 20), -1, -1));
-        dbPanel.setBackground(new Color(-262193));
+        dbPanel.setBackground(new Color(-6242860));
         mainFrameRootPanel.add(dbPanel, BorderLayout.NORTH);
         dbPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         openDBButon = new JButton();
@@ -301,7 +342,7 @@ public class MainFrame extends JFrame {
         openDBButon.setText("Abrir Banco de Dados");
         dbPanel.add(openDBButon, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         dbAddressTextField = new JTextField();
-        dbAddressTextField.setBackground(new Color(-3879731));
+        dbAddressTextField.setBackground(new Color(-8679521));
         Font dbAddressTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, 18, dbAddressTextField.getFont());
         if (dbAddressTextFieldFont != null) dbAddressTextField.setFont(dbAddressTextFieldFont);
         dbPanel.add(dbAddressTextField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -311,45 +352,85 @@ public class MainFrame extends JFrame {
         createDBButton.setText("Criar Banco de Dados");
         dbPanel.add(createDBButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayoutManager(7, 2, new Insets(30, 50, 20, 50), -1, -1));
-        buttonsPanel.setBackground(new Color(-15530905));
+        buttonsPanel.setLayout(new GridLayoutManager(4, 1, new Insets(30, 50, 20, 50), -1, -1));
+        buttonsPanel.setBackground(new Color(-14531487));
         mainFrameRootPanel.add(buttonsPanel, BorderLayout.WEST);
-        buttonsPanelLabel = new JLabel();
-        buttonsPanelLabel.setBackground(new Color(-918273));
-        Font buttonsPanelLabelFont = this.$$$getFont$$$(null, Font.BOLD, 26, buttonsPanelLabel.getFont());
-        if (buttonsPanelLabelFont != null) buttonsPanelLabel.setFont(buttonsPanelLabelFont);
-        buttonsPanelLabel.setForeground(new Color(-918273));
-        buttonsPanelLabel.setHorizontalAlignment(0);
-        buttonsPanelLabel.setText("Ações");
-        buttonsPanel.add(buttonsPanelLabel, new GridConstraints(0, 0, 7, 2, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         pessoalButton = new JButton();
         Font pessoalButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, pessoalButton.getFont());
         if (pessoalButtonFont != null) pessoalButton.setFont(pessoalButtonFont);
         pessoalButton.setIcon(new ImageIcon(getClass().getResource("/people-100x100.png")));
         pessoalButton.setText("Pessoal/Assessores");
-        buttonsPanel.add(pessoalButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buttonsPanel.add(pessoalButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         produtoButton = new JButton();
         Font produtoButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, produtoButton.getFont());
         if (produtoButtonFont != null) produtoButton.setFont(produtoButtonFont);
         produtoButton.setIcon(new ImageIcon(getClass().getResource("/product-100x100.png")));
         produtoButton.setText("Produto");
-        buttonsPanel.add(produtoButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buttonsPanel.add(produtoButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         capitaoButton = new JButton();
         Font capitaoButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, capitaoButton.getFont());
         if (capitaoButtonFont != null) capitaoButton.setFont(capitaoButtonFont);
         capitaoButton.setIcon(new ImageIcon(getClass().getResource("/po-100x100.png")));
         capitaoButton.setText("Capitão");
-        buttonsPanel.add(capitaoButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(98, 31), null, 0, false));
+        buttonsPanel.add(capitaoButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(98, 31), null, 0, false));
         sairButton = new JButton();
         Font sairButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, sairButton.getFont());
         if (sairButtonFont != null) sairButton.setFont(sairButtonFont);
         sairButton.setIcon(new ImageIcon(getClass().getResource("/exit-100x100.png")));
         sairButton.setText("Sair");
-        buttonsPanel.add(sairButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        buttonsPanel.add(sairButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        contentPanel.setBackground(new Color(-16777216));
+        contentPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel.setBackground(new Color(-14408925));
         mainFrameRootPanel.add(contentPanel, BorderLayout.CENTER);
+        contactPanel = new JPanel();
+        contactPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        contactPanel.setBackground(new Color(-10461088));
+        contentPanel.add(contactPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        contactPanel.add(spacer1);
+        final JLabel label1 = new JLabel();
+        Font label1Font = this.$$$getFont$$$("Courier New", Font.ITALIC, 12, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
+        label1.setForeground(new Color(-16777216));
+        label1.setHorizontalAlignment(4);
+        label1.setHorizontalTextPosition(4);
+        label1.setText("developed by Pedro Azzam");
+        contactPanel.add(label1);
+        final JLabel label2 = new JLabel();
+        Font label2Font = this.$$$getFont$$$("Courier New", Font.ITALIC, 12, label2.getFont());
+        if (label2Font != null) label2.setFont(label2Font);
+        label2.setForeground(new Color(-16777216));
+        label2.setHorizontalAlignment(4);
+        label2.setHorizontalTextPosition(4);
+        label2.setText("web:");
+        contactPanel.add(label2);
+        byWebLabel = new JLabel();
+        Font byWebLabelFont = this.$$$getFont$$$("Courier New", Font.ITALIC, 12, byWebLabel.getFont());
+        if (byWebLabelFont != null) byWebLabel.setFont(byWebLabelFont);
+        byWebLabel.setForeground(new Color(-16777216));
+        byWebLabel.setHorizontalAlignment(4);
+        byWebLabel.setHorizontalTextPosition(2);
+        byWebLabel.setText("Label");
+        contactPanel.add(byWebLabel);
+        final JLabel label3 = new JLabel();
+        Font label3Font = this.$$$getFont$$$("Courier New", Font.ITALIC, 12, label3.getFont());
+        if (label3Font != null) label3.setFont(label3Font);
+        label3.setForeground(new Color(-16777216));
+        label3.setHorizontalAlignment(4);
+        label3.setHorizontalTextPosition(4);
+        label3.setText("email:");
+        contactPanel.add(label3);
+        byEmailLabel = new JLabel();
+        Font byEmailLabelFont = this.$$$getFont$$$("Courier New", Font.ITALIC, 12, byEmailLabel.getFont());
+        if (byEmailLabelFont != null) byEmailLabel.setFont(byEmailLabelFont);
+        byEmailLabel.setForeground(new Color(-16777216));
+        byEmailLabel.setHorizontalAlignment(4);
+        byEmailLabel.setHorizontalTextPosition(2);
+        byEmailLabel.setText("Label");
+        contactPanel.add(byEmailLabel);
+        final Spacer spacer2 = new Spacer();
+        contentPanel.add(spacer2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**

@@ -78,7 +78,7 @@ public class PessoalFrame extends JInternalFrame {
         setMaximizable(true); // maximize
 //        setIconifiable(true); // set minimize
         setClosable(true); // set closed
-//        setResizable(true); // set resizable
+        setResizable(true); // set resizable
 
         setVisible(true);
         preencherTabelaSelectAll();
@@ -339,82 +339,158 @@ public class PessoalFrame extends JInternalFrame {
         pessoalRootPanel.setLayout(new BorderLayout(0, 0));
         westLabelPanel = new JPanel();
         westLabelPanel.setLayout(new GridLayoutManager(7, 1, new Insets(30, 10, 50, 5), -1, -1));
+        westLabelPanel.setBackground(new Color(-8679521));
         westLabelPanel.setToolTipText("");
         pessoalRootPanel.add(westLabelPanel, BorderLayout.WEST);
         westLabelPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.LEFT, TitledBorder.ABOVE_TOP, null, null));
         final JLabel label1 = new JLabel();
+        Font label1Font = this.$$$getFont$$$(null, Font.BOLD, -1, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
+        label1.setForeground(new Color(-1));
         label1.setText("Nome:");
         westLabelPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
+        Font label2Font = this.$$$getFont$$$(null, Font.BOLD, -1, label2.getFont());
+        if (label2Font != null) label2.setFont(label2Font);
+        label2.setForeground(new Color(-1));
         label2.setText("E-Mail:");
         westLabelPanel.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label3 = new JLabel();
+        Font label3Font = this.$$$getFont$$$(null, Font.BOLD, -1, label3.getFont());
+        if (label3Font != null) label3.setFont(label3Font);
+        label3.setForeground(new Color(-1));
         label3.setText("CPF:");
         westLabelPanel.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
+        Font label4Font = this.$$$getFont$$$(null, Font.BOLD, -1, label4.getFont());
+        if (label4Font != null) label4.setFont(label4Font);
+        label4.setForeground(new Color(-1));
         label4.setText("Cod Assessor:");
         westLabelPanel.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
+        Font label5Font = this.$$$getFont$$$(null, Font.BOLD, -1, label5.getFont());
+        if (label5Font != null) label5.setFont(label5Font);
+        label5.setForeground(new Color(-1));
         label5.setText("Cod. Banco:");
         westLabelPanel.add(label5, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
+        Font label6Font = this.$$$getFont$$$(null, Font.BOLD, -1, label6.getFont());
+        if (label6Font != null) label6.setFont(label6Font);
+        label6.setForeground(new Color(-1));
         label6.setText("Agência:");
         westLabelPanel.add(label6, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label7 = new JLabel();
+        Font label7Font = this.$$$getFont$$$(null, Font.BOLD, -1, label7.getFont());
+        if (label7Font != null) label7.setFont(label7Font);
+        label7.setForeground(new Color(-1));
         label7.setText("Conta:");
         westLabelPanel.add(label7, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         eastGridPanel = new JPanel();
         eastGridPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 10), -1, -1));
+        eastGridPanel.setBackground(new Color(-8679521));
         pessoalRootPanel.add(eastGridPanel, BorderLayout.EAST);
         final JScrollPane scrollPane1 = new JScrollPane();
+        scrollPane1.setBackground(new Color(-8679521));
         eastGridPanel.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         table1 = new JTable();
         table1.setAutoResizeMode(4);
         scrollPane1.setViewportView(table1);
         centerTextPanel = new JPanel();
         centerTextPanel.setLayout(new GridLayoutManager(7, 3, new Insets(30, 0, 50, 20), -1, -1));
+        centerTextPanel.setBackground(new Color(-8679521));
         pessoalRootPanel.add(centerTextPanel, BorderLayout.CENTER);
         centerTextPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         nomeTextField = new JTextField();
+        Font nomeTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, nomeTextField.getFont());
+        if (nomeTextFieldFont != null) nomeTextField.setFont(nomeTextFieldFont);
         centerTextPanel.add(nomeTextField, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         emailTextField = new JTextField();
+        Font emailTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, emailTextField.getFont());
+        if (emailTextFieldFont != null) emailTextField.setFont(emailTextFieldFont);
         centerTextPanel.add(emailTextField, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         cpfTextField = new JTextField();
+        Font cpfTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, cpfTextField.getFont());
+        if (cpfTextFieldFont != null) cpfTextField.setFont(cpfTextFieldFont);
         centerTextPanel.add(cpfTextField, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         codAssessorTextField = new JTextField();
+        Font codAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, codAssessorTextField.getFont());
+        if (codAssessorTextFieldFont != null) codAssessorTextField.setFont(codAssessorTextFieldFont);
         centerTextPanel.add(codAssessorTextField, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         codBancoTextField = new JTextField();
+        Font codBancoTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, codBancoTextField.getFont());
+        if (codBancoTextFieldFont != null) codBancoTextField.setFont(codBancoTextFieldFont);
         centerTextPanel.add(codBancoTextField, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         agenciaTextField = new JTextField();
+        Font agenciaTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, agenciaTextField.getFont());
+        if (agenciaTextFieldFont != null) agenciaTextField.setFont(agenciaTextFieldFont);
         centerTextPanel.add(agenciaTextField, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         contaTextField = new JTextField();
+        Font contaTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, contaTextField.getFont());
+        if (contaTextFieldFont != null) contaTextField.setFont(contaTextFieldFont);
         centerTextPanel.add(contaTextField, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         dvTextField = new JTextField();
+        Font dvTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, dvTextField.getFont());
+        if (dvTextFieldFont != null) dvTextField.setFont(dvTextFieldFont);
         centerTextPanel.add(dvTextField, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         final JLabel label8 = new JLabel();
+        Font label8Font = this.$$$getFont$$$(null, Font.BOLD, -1, label8.getFont());
+        if (label8Font != null) label8.setFont(label8Font);
+        label8.setForeground(new Color(-1));
         label8.setText("DV:");
         centerTextPanel.add(label8, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         southButtonPanel = new JPanel();
         southButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        southButtonPanel.setBackground(new Color(-10461088));
         pessoalRootPanel.add(southButtonPanel, BorderLayout.SOUTH);
         inserirEmMassaButton = new JButton();
+        Font inserirEmMassaButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, inserirEmMassaButton.getFont());
+        if (inserirEmMassaButtonFont != null) inserirEmMassaButton.setFont(inserirEmMassaButtonFont);
         inserirEmMassaButton.setText("Inserir em Massa");
         southButtonPanel.add(inserirEmMassaButton);
         insertTestButton = new JButton();
+        Font insertTestButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, insertTestButton.getFont());
+        if (insertTestButtonFont != null) insertTestButton.setFont(insertTestButtonFont);
         insertTestButton.setText("Inserir Teste");
         southButtonPanel.add(insertTestButton);
         insertButton = new JButton();
+        Font insertButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, insertButton.getFont());
+        if (insertButtonFont != null) insertButton.setFont(insertButtonFont);
         insertButton.setText("Inserir");
         southButtonPanel.add(insertButton);
         editButton = new JButton();
+        Font editButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, editButton.getFont());
+        if (editButtonFont != null) editButton.setFont(editButtonFont);
         editButton.setText("Editar");
         southButtonPanel.add(editButton);
         cancelButton = new JButton();
+        Font cancelButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, cancelButton.getFont());
+        if (cancelButtonFont != null) cancelButton.setFont(cancelButtonFont);
         cancelButton.setText("Cancelar / Limpar campos");
         southButtonPanel.add(cancelButton);
         deleteButton = new JButton();
+        Font deleteButtonFont = this.$$$getFont$$$(null, Font.BOLD, 16, deleteButton.getFont());
+        if (deleteButtonFont != null) deleteButton.setFont(deleteButtonFont);
         deleteButton.setText("Deletar");
         southButtonPanel.add(deleteButton);
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
     }
 
     /**
