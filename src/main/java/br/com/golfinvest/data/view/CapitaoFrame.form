@@ -86,7 +86,7 @@
                 <properties>
                   <font style="1"/>
                   <foreground color="-1"/>
-                  <text value="Comissão"/>
+                  <text value="Comissão(%)"/>
                 </properties>
               </component>
               <component id="f9dba" class="javax.swing.JTextField" binding="comissaoTextField">

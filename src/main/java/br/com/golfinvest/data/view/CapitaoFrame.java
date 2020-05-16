@@ -23,7 +23,7 @@ public class CapitaoFrame extends JInternalFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel capitaesTableModel;
-    String col[] = {"Capitão", "Produto", "Comissão"};
+    String col[] = {"Capitão", "Produto", "Comissão(%)"};
     List<Capitao> capitaoList;
     DefaultListModel produtoListModel;
     DefaultComboBoxModel capitaoComboBoxModel;
@@ -284,7 +284,7 @@ public class CapitaoFrame extends JInternalFrame {
         Font label3Font = this.$$$getFont$$$(null, Font.BOLD, -1, label3.getFont());
         if (label3Font != null) label3.setFont(label3Font);
         label3.setForeground(new Color(-1));
-        label3.setText("Comissão");
+        label3.setText("Comissão(%)");
         panel1.add(label3, new GridConstraints(2, 3, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         comissaoTextField = new JTextField();
         panel1.add(comissaoTextField, new GridConstraints(2, 4, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
