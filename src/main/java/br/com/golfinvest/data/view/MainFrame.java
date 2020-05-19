@@ -284,12 +284,12 @@ public class MainFrame extends JFrame {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     out.append(line);   // add everything to StringBuilder
-//                    JOptionPane.showMessageDialog(null, line);
-                    System.out.println("antes " + line + " depois");
-                    jdbcTemplate.execute(line);
                     // here you can have your logic of comparison.
-                    if (line.toString().equals(".")) {
-                        // do something
+                    if (line.toString().substring(0, 2).equals("--")) {
+                        System.out.println("Command Disabled: " + line);
+                    } else {
+                        System.out.println("Command Enabled: " + line);
+                        jdbcTemplate.execute(line);
                     }
                 }
             } catch (IOException ioException) {

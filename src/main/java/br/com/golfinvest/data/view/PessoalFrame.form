@@ -153,16 +153,6 @@
               <font style="1"/>
             </properties>
           </component>
-          <component id="bf41f" class="javax.swing.JTextField" binding="codAssessorTextField">
-            <constraints>
-              <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font style="1"/>
-            </properties>
-          </component>
           <component id="668a1" class="javax.swing.JTextField" binding="codBancoTextField">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
@@ -211,6 +201,36 @@
               <font style="1"/>
               <foreground color="-1"/>
               <text value="DV:"/>
+            </properties>
+          </component>
+          <component id="7c828" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font style="1"/>
+              <foreground color="-1"/>
+              <text value="Rep:"/>
+            </properties>
+          </component>
+          <component id="bf41f" class="javax.swing.JTextField" binding="codAssessorTextField">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font style="1"/>
+            </properties>
+          </component>
+          <component id="e5116" class="javax.swing.JTextField" binding="repasseAssessorTextField">
+            <constraints>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="50" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font style="1"/>
             </properties>
           </component>
         </children>
