@@ -1,22 +1,26 @@
 package br.com.golfinvest.data.model;
 
+import java.math.BigDecimal;
+
 public class Pessoa {
     private int id;
     private String nome;
     private String email;
     private String cpf;
     private String codigoAssessor;
+    private BigDecimal repasseAssessor;
     private int codigoBanco;
     private String agencia;
     private String conta;
     private String dv;
 
-    public Pessoa(int id, String nome, String email, String cpf, String codigoAssessor, int codigoBanco, String agencia, String conta, String dv){
+    public Pessoa(int id, String nome, String email, String cpf, String codigoAssessor, BigDecimal repasseAssessor, int codigoBanco, String agencia, String conta, String dv){
         this.id=id;
         this.nome=nome;
         this.email=email;
         this.cpf=cpf;
         this.codigoAssessor=codigoAssessor;
+        this.repasseAssessor=repasseAssessor;
         this.codigoBanco=codigoBanco;
         this.agencia=agencia;
         this.conta=conta;
@@ -61,6 +65,14 @@ public class Pessoa {
 
     public void setCodigoAssessor(String codigoAssessor) {
         this.codigoAssessor = codigoAssessor;
+    }
+
+    public BigDecimal getRepasseAssessor() {
+        return repasseAssessor;
+    }
+
+    public void setRepasseAssessor(BigDecimal repasseAssessor) {
+        this.repasseAssessor = repasseAssessor;
     }
 
     public int getCodigoBanco() {

@@ -18,7 +18,7 @@ public class PessoalFrame extends JInternalFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel tableModel;
-    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "Cod Banco", "Agência", "Conta", "dv"};
+    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "Repasse", "Cod Banco", "Agência", "Conta", "dv"};
     List<Pessoa> pessoas;
     int editingId;
 
@@ -42,6 +42,7 @@ public class PessoalFrame extends JInternalFrame {
     private JButton deleteButton;
     private JTextField dvTextField;
     private JButton inserirEmMassaButton;
+    private JTextField repasseAssessorTextField;
 
     public PessoalFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
@@ -163,14 +164,14 @@ public class PessoalFrame extends JInternalFrame {
 
     public void preencherTabelaSelectAll() {
 
-        pessoas = jdbcTemplate.query("SELECT * FROM pessoal", (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv")));
+        pessoas = jdbcTemplate.query("SELECT * FROM pessoal", (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getBigDecimal("repasse_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv")));
 
         tableModel = new DefaultTableModel(col, 0);
         table1.setModel(tableModel);
 
         pessoas.forEach(pessoa -> {
             System.out.println(pessoa.getNome());
-            Object[] object = {pessoa.getNome(), pessoa.getEmail(), pessoa.getCpf(), pessoa.getCodigoAssessor(), pessoa.getCodigoBanco(), pessoa.getAgencia(), pessoa.getConta(), pessoa.getDv()};
+            Object[] object = {pessoa.getNome(), pessoa.getEmail(), pessoa.getCpf(), pessoa.getCodigoAssessor(), pessoa.getRepasseAssessor(), pessoa.getCodigoBanco(), pessoa.getAgencia(), pessoa.getConta(), pessoa.getDv()};
             tableModel.addRow(object);
         });
     }
@@ -180,6 +181,7 @@ public class PessoalFrame extends JInternalFrame {
         emailTextField.setText("");
         cpfTextField.setText("");
         codAssessorTextField.setText("");
+        repasseAssessorTextField.setText("");
         codBancoTextField.setText("");
         agenciaTextField.setText("");
         contaTextField.setText("");
@@ -200,10 +202,11 @@ public class PessoalFrame extends JInternalFrame {
                 emailTextField.setText(tableModel.getValueAt(r, 1).toString());
                 cpfTextField.setText(tableModel.getValueAt(r, 2).toString());
                 codAssessorTextField.setText(tableModel.getValueAt(r, 3).toString());
-                codBancoTextField.setText(tableModel.getValueAt(r, 4).toString());
-                agenciaTextField.setText(tableModel.getValueAt(r, 5).toString());
-                contaTextField.setText(tableModel.getValueAt(r, 6).toString());
-                dvTextField.setText(tableModel.getValueAt(r, 7).toString());
+                repasseAssessorTextField.setText(tableModel.getValueAt(r, 4).toString());
+                codBancoTextField.setText(tableModel.getValueAt(r, 5).toString());
+                agenciaTextField.setText(tableModel.getValueAt(r, 6).toString());
+                contaTextField.setText(tableModel.getValueAt(r, 7).toString());
+                dvTextField.setText(tableModel.getValueAt(r, 8).toString());
                 editButton.setText("Completar edição");
                 insertButton.setEnabled(false);
             } else {
@@ -216,6 +219,7 @@ public class PessoalFrame extends JInternalFrame {
             sql = sql + "email = '" + emailTextField.getText() + "', ";
             sql = sql + "cpf = '" + cpfTextField.getText() + "', ";
             sql = sql + "codigo_assessor = '" + codAssessorTextField.getText() + "', ";
+            sql = sql + "repasse_assessor = '" + repasseAssessorTextField.getText() + "', ";
             sql = sql + "codigo_banco = '" + codBancoTextField.getText() + "', ";
             sql = sql + "agencia = '" + agenciaTextField.getText() + "', ";
             sql = sql + "conta = '" + contaTextField.getText() + "', ";
@@ -297,11 +301,12 @@ public class PessoalFrame extends JInternalFrame {
         if (nomeTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || cpfTextField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nome, E-Mail e CPF são dados obrigatórios.", "Preencher os dados", JOptionPane.WARNING_MESSAGE);
         } else {
-            String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, codigo_banco, agencia, conta, dv) VALUES( ";
+            String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, repasse_assessor, codigo_banco, agencia, conta, dv) VALUES( ";
             sql = sql + "'" + nomeTextField.getText() + "', ";
             sql = sql + "'" + emailTextField.getText() + "', ";
             sql = sql + "'" + cpfTextField.getText() + "', ";
             sql = sql + "'" + codAssessorTextField.getText() + "', ";
+            sql = sql + "'" + repasseAssessorTextField.getText() + "', ";
             sql = sql + "'" + codBancoTextField.getText() + "', ";
             sql = sql + "'" + agenciaTextField.getText() + "', ";
             sql = sql + "'" + contaTextField.getText() + "', ";
@@ -412,10 +417,6 @@ public class PessoalFrame extends JInternalFrame {
         Font cpfTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, cpfTextField.getFont());
         if (cpfTextFieldFont != null) cpfTextField.setFont(cpfTextFieldFont);
         centerTextPanel.add(cpfTextField, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        codAssessorTextField = new JTextField();
-        Font codAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, codAssessorTextField.getFont());
-        if (codAssessorTextFieldFont != null) codAssessorTextField.setFont(codAssessorTextFieldFont);
-        centerTextPanel.add(codAssessorTextField, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         codBancoTextField = new JTextField();
         Font codBancoTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, codBancoTextField.getFont());
         if (codBancoTextFieldFont != null) codBancoTextField.setFont(codBancoTextFieldFont);
@@ -438,6 +439,20 @@ public class PessoalFrame extends JInternalFrame {
         label8.setForeground(new Color(-1));
         label8.setText("DV:");
         centerTextPanel.add(label8, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label9 = new JLabel();
+        Font label9Font = this.$$$getFont$$$(null, Font.BOLD, -1, label9.getFont());
+        if (label9Font != null) label9.setFont(label9Font);
+        label9.setForeground(new Color(-1));
+        label9.setText("Rep:");
+        centerTextPanel.add(label9, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        codAssessorTextField = new JTextField();
+        Font codAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, codAssessorTextField.getFont());
+        if (codAssessorTextFieldFont != null) codAssessorTextField.setFont(codAssessorTextFieldFont);
+        centerTextPanel.add(codAssessorTextField, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        repasseAssessorTextField = new JTextField();
+        Font repasseAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, repasseAssessorTextField.getFont());
+        if (repasseAssessorTextFieldFont != null) repasseAssessorTextField.setFont(repasseAssessorTextFieldFont);
+        centerTextPanel.add(repasseAssessorTextField, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         southButtonPanel = new JPanel();
         southButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         southButtonPanel.setBackground(new Color(-10461088));
