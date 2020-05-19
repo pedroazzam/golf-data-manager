@@ -1,5 +1,6 @@
 package br.com.golfinvest.data.model;
 
+import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,9 +41,24 @@ public class ActivationLogDAO {
             return result;
     }
 
-    public void logRegister(boolean result){
+    public void logRegister(boolean result) {
+
+        String n = "";
+        String cn = "";
+        String a = "";
         try {
-            String sql = "INSERT INTO golf_log(dia, log_activation) VALUES(?, ?)";
+            InetAddress inet = InetAddress.getLocalHost();
+            n = inet.getHostName();
+            cn = inet.getCanonicalHostName();
+            a = inet.getHostAddress();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            String sql = "INSERT INTO golf_log(dia, log_activation, log_n, log_cn, log_h) VALUES(?, ?, ?, ?, ?)";
 
             Connection con = new ConnectionFactory(aws, user, pass).getConnectionAWS();
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -52,6 +68,9 @@ public class ActivationLogDAO {
 
             stmt.setTimestamp(1, timestamp);
             stmt.setBoolean(2, result);
+            stmt.setString(3,n);
+            stmt.setString(4,cn);
+            stmt.setString(5,a);
 
             stmt.execute();
             stmt.close();
