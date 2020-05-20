@@ -11,14 +11,18 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyVetoException;
 import java.io.*;
+import java.util.*;
 import java.util.List;
 
 public class PessoalFrame extends JInternalFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel tableModel;
-    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "Repasse", "Cod Banco", "Agência", "Conta", "dv"};
+    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "RepPrev", "RepSeg", "Cod Banco", "Agência", "Conta", "dv", "Xerife", "RepSeg"};
+    String[] xerifeItems = {""};
+    SortedComboBoxModel xerifeComboBoxModel;
     List<Pessoa> pessoas;
     int editingId;
 
@@ -42,13 +46,18 @@ public class PessoalFrame extends JInternalFrame {
     private JButton deleteButton;
     private JTextField dvTextField;
     private JButton inserirEmMassaButton;
-    private JTextField repasseAssessorTextField;
+    private JTextField repassePrevAssessorTextField;
+    private JTextField repasseSegAssessorTextField;
+    private JComboBox xerifeComboBox;
+    private JTextField repassePrevXerifeTextField;
 
     public PessoalFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
         title = title + " - (Registro de pessoal no banco de dados)";
         setTitle(title);
-        setSize(1000, 480);
+
+
+//        setSize(1200, 480);
         jdbcTemplate = jdbcTemplatePassed;
 
         initComponents();
@@ -62,13 +71,6 @@ public class PessoalFrame extends JInternalFrame {
         setContentPane(pessoalRootPanel);
 //        setLocationRelativeTo(null);
 
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//        Point middle = new Point(screenSize.width / 2, screenSize.height / 2);
-//        Point newLocation = new Point(middle.x - (getWidth() / 2),
-//                middle.y - (getHeight() / 2));
-//        setLocation(newLocation);
-
-
         insertTestButton.setVisible(false); // Disable button to insert test data
 
         tableModel = new DefaultTableModel(col, 0);
@@ -76,13 +78,16 @@ public class PessoalFrame extends JInternalFrame {
 
         table1.setRowSelectionAllowed(true);
 
+        xerifeComboBoxModel = new SortedComboBoxModel(xerifeItems);
+        xerifeComboBox.setModel(xerifeComboBoxModel);
+
         setMaximizable(true); // maximize
 //        setIconifiable(true); // set minimize
         setClosable(true); // set closed
         setResizable(true); // set resizable
 
         setVisible(true);
-        preencherTabelaSelectAll();
+        preencherTabelaEComboBoxSelectAll();
     }
 
     public void regEvents() {
@@ -106,7 +111,7 @@ public class PessoalFrame extends JInternalFrame {
                     ioException.printStackTrace();
                 }
 
-                preencherTabelaSelectAll();
+                preencherTabelaEComboBoxSelectAll();
             }
         });
 
@@ -162,18 +167,23 @@ public class PessoalFrame extends JInternalFrame {
     }
 
 
-    public void preencherTabelaSelectAll() {
+    public void preencherTabelaEComboBoxSelectAll() {
 
-        pessoas = jdbcTemplate.query("SELECT * FROM pessoal", (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getBigDecimal("repasse_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv")));
+        pessoas = jdbcTemplate.query("SELECT * FROM pessoal", (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getBigDecimal("repasse_prev_assessor"), rs.getBigDecimal("repasse_seg_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv"), rs.getString("codigo_xerife"), rs.getBigDecimal("repasse_prev_xerife")));
 
         tableModel = new DefaultTableModel(col, 0);
         table1.setModel(tableModel);
 
+        xerifeComboBoxModel.removeAllElements();
+        xerifeComboBoxModel.addElement("");
         pessoas.forEach(pessoa -> {
             System.out.println(pessoa.getNome());
-            Object[] object = {pessoa.getNome(), pessoa.getEmail(), pessoa.getCpf(), pessoa.getCodigoAssessor(), pessoa.getRepasseAssessor(), pessoa.getCodigoBanco(), pessoa.getAgencia(), pessoa.getConta(), pessoa.getDv()};
+            Object[] object = {pessoa.getNome(), pessoa.getEmail(), pessoa.getCpf(), pessoa.getCodigoAssessor(), pessoa.getRepassePrevAssessor(), pessoa.getRepasseSegAssessor(), pessoa.getCodigoBanco(), pessoa.getAgencia(), pessoa.getConta(), pessoa.getDv(), pessoa.getCodigoXerife(), pessoa.getRepassePrevXerife()};
             tableModel.addRow(object);
+
+            xerifeComboBoxModel.addElement(pessoa.getCodigoAssessor());
         });
+        xerifeComboBox.setSelectedIndex(0);
     }
 
     public void limparCampos() {
@@ -181,11 +191,14 @@ public class PessoalFrame extends JInternalFrame {
         emailTextField.setText("");
         cpfTextField.setText("");
         codAssessorTextField.setText("");
-        repasseAssessorTextField.setText("");
+        repassePrevAssessorTextField.setText("");
+        repasseSegAssessorTextField.setText("");
         codBancoTextField.setText("");
         agenciaTextField.setText("");
         contaTextField.setText("");
         dvTextField.setText("");
+        xerifeComboBox.setSelectedIndex(0);
+        repassePrevXerifeTextField.setText("");
     }
 
     public void editarPessoal() {
@@ -202,28 +215,36 @@ public class PessoalFrame extends JInternalFrame {
                 emailTextField.setText(tableModel.getValueAt(r, 1).toString());
                 cpfTextField.setText(tableModel.getValueAt(r, 2).toString());
                 codAssessorTextField.setText(tableModel.getValueAt(r, 3).toString());
-                repasseAssessorTextField.setText(tableModel.getValueAt(r, 4).toString());
-                codBancoTextField.setText(tableModel.getValueAt(r, 5).toString());
-                agenciaTextField.setText(tableModel.getValueAt(r, 6).toString());
-                contaTextField.setText(tableModel.getValueAt(r, 7).toString());
-                dvTextField.setText(tableModel.getValueAt(r, 8).toString());
+                repassePrevAssessorTextField.setText(tableModel.getValueAt(r, 4).toString());
+                repasseSegAssessorTextField.setText(tableModel.getValueAt(r, 5).toString());
+                codBancoTextField.setText(tableModel.getValueAt(r, 6).toString());
+                agenciaTextField.setText(tableModel.getValueAt(r, 7).toString());
+                contaTextField.setText(tableModel.getValueAt(r, 8).toString());
+                dvTextField.setText(tableModel.getValueAt(r, 9).toString());
+                xerifeComboBox.setSelectedItem(tableModel.getValueAt(r, 10).toString());
+                repassePrevXerifeTextField.setText(tableModel.getValueAt(r, 11).toString());
                 editButton.setText("Completar edição");
                 insertButton.setEnabled(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Para editar é necessário selecionar a tabela antes.", "Selecionar para editar", JOptionPane.WARNING_MESSAGE);
             }
         } else {
+            // antes de prosseguir, verificar se os campos BigDecimal possuem valores que não números
+
             // concluir a edição
             String sql = "UPDATE pessoal SET ";
             sql = sql + "nome = '" + nomeTextField.getText() + "', ";
             sql = sql + "email = '" + emailTextField.getText() + "', ";
             sql = sql + "cpf = '" + cpfTextField.getText() + "', ";
             sql = sql + "codigo_assessor = '" + codAssessorTextField.getText() + "', ";
-            sql = sql + "repasse_assessor = '" + repasseAssessorTextField.getText() + "', ";
+            sql = sql + "repasse_prev_assessor = '" + ((repassePrevAssessorTextField.getText() == null) || (repassePrevAssessorTextField.getText().isEmpty()) ? "0" : repassePrevAssessorTextField.getText()) + "', ";
+            sql = sql + "repasse_seg_assessor = '" + ((repasseSegAssessorTextField.getText() == null) || (repasseSegAssessorTextField.getText().isEmpty()) ? "0" : repasseSegAssessorTextField.getText()) + "', ";
             sql = sql + "codigo_banco = '" + codBancoTextField.getText() + "', ";
             sql = sql + "agencia = '" + agenciaTextField.getText() + "', ";
             sql = sql + "conta = '" + contaTextField.getText() + "', ";
-            sql = sql + "dv = '" + dvTextField.getText() + "' ";
+            sql = sql + "dv = '" + dvTextField.getText() + "', ";
+            sql = sql + "codigo_xerife = '" + String.valueOf(xerifeComboBox.getSelectedItem()) + "', ";
+            sql = sql + "repasse_prev_xerife = '" + ((repassePrevXerifeTextField.getText() == null) || (repassePrevXerifeTextField.getText().isEmpty()) ? "0" : repassePrevXerifeTextField.getText()) + "' ";
             sql = sql + "WHERE id = " + editingId;
             System.out.println("Executando: " + sql);
 
@@ -231,7 +252,7 @@ public class PessoalFrame extends JInternalFrame {
                 jdbcTemplate.execute(sql);
 
                 limparCampos();
-                preencherTabelaSelectAll();
+                preencherTabelaEComboBoxSelectAll();
                 editButton.setText("Editar");
                 insertButton.setEnabled(true);
                 JOptionPane.showMessageDialog(null, "Editado com sucesso", "Editado", JOptionPane.INFORMATION_MESSAGE);
@@ -248,7 +269,7 @@ public class PessoalFrame extends JInternalFrame {
         limparCampos();
         editButton.setText("Editar");
         insertButton.setEnabled(true);
-        preencherTabelaSelectAll();
+        preencherTabelaEComboBoxSelectAll();
     }
 
     public void deletarPessoal() {
@@ -286,7 +307,7 @@ public class PessoalFrame extends JInternalFrame {
 
                 }
                 limparCampos();
-                preencherTabelaSelectAll();
+                preencherTabelaEComboBoxSelectAll();
                 JOptionPane.showMessageDialog(null, "Informações deletadas com sucesso", "Deletado", JOptionPane.INFORMATION_MESSAGE);
 
             }
@@ -301,20 +322,23 @@ public class PessoalFrame extends JInternalFrame {
         if (nomeTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || cpfTextField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nome, E-Mail e CPF são dados obrigatórios.", "Preencher os dados", JOptionPane.WARNING_MESSAGE);
         } else {
-            String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, repasse_assessor, codigo_banco, agencia, conta, dv) VALUES( ";
+            String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, repasse_prev_assessor, repasse_seg_assessor, codigo_banco, agencia, conta, dv, codigo_xerife, repasse_prev_xerife) VALUES( ";
             sql = sql + "'" + nomeTextField.getText() + "', ";
             sql = sql + "'" + emailTextField.getText() + "', ";
             sql = sql + "'" + cpfTextField.getText() + "', ";
             sql = sql + "'" + codAssessorTextField.getText() + "', ";
-            sql = sql + "'" + repasseAssessorTextField.getText() + "', ";
+            sql = sql + "'" + ((repassePrevAssessorTextField.getText() == null) || (repassePrevAssessorTextField.getText().isEmpty()) ? "0" : repassePrevAssessorTextField.getText()) + "', ";
+            sql = sql + "'" + ((repasseSegAssessorTextField.getText() == null) || (repasseSegAssessorTextField.getText().isEmpty()) ? "0" : repasseSegAssessorTextField.getText()) + "', ";
             sql = sql + "'" + codBancoTextField.getText() + "', ";
             sql = sql + "'" + agenciaTextField.getText() + "', ";
             sql = sql + "'" + contaTextField.getText() + "', ";
-            sql = sql + "'" + dvTextField.getText() + "');";
+            sql = sql + "'" + dvTextField.getText() + "', ";
+            sql = sql + "'" + String.valueOf(xerifeComboBox.getSelectedItem()) + "', ";
+            sql = sql + "'" + ((repassePrevXerifeTextField.getText() == null) || (repassePrevXerifeTextField.getText().isEmpty()) ? "0" : repassePrevXerifeTextField.getText()) + "');";
             try {
                 jdbcTemplate.execute(sql);
                 limparCampos();
-                preencherTabelaSelectAll();
+                preencherTabelaEComboBoxSelectAll();
             } catch (Exception e) {
                 System.out.println("Mensagem de erro: " + e.getCause());
                 JOptionPane.showMessageDialog(null, e.getCause());
@@ -343,7 +367,7 @@ public class PessoalFrame extends JInternalFrame {
         pessoalRootPanel = new JPanel();
         pessoalRootPanel.setLayout(new BorderLayout(0, 0));
         westLabelPanel = new JPanel();
-        westLabelPanel.setLayout(new GridLayoutManager(7, 1, new Insets(30, 10, 50, 5), -1, -1));
+        westLabelPanel.setLayout(new GridLayoutManager(8, 1, new Insets(30, 10, 50, 5), -1, -1));
         westLabelPanel.setBackground(new Color(-8679521));
         westLabelPanel.setToolTipText("");
         pessoalRootPanel.add(westLabelPanel, BorderLayout.WEST);
@@ -390,6 +414,12 @@ public class PessoalFrame extends JInternalFrame {
         label7.setForeground(new Color(-1));
         label7.setText("Conta:");
         westLabelPanel.add(label7, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label8 = new JLabel();
+        Font label8Font = this.$$$getFont$$$(null, Font.BOLD, -1, label8.getFont());
+        if (label8Font != null) label8.setFont(label8Font);
+        label8.setForeground(new Color(-1));
+        label8.setText("Xerife:");
+        westLabelPanel.add(label8, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         eastGridPanel = new JPanel();
         eastGridPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 10), -1, -1));
         eastGridPanel.setBackground(new Color(-8679521));
@@ -398,33 +428,38 @@ public class PessoalFrame extends JInternalFrame {
         scrollPane1.setBackground(new Color(-8679521));
         eastGridPanel.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         table1 = new JTable();
+        table1.setAutoCreateColumnsFromModel(true);
         table1.setAutoResizeMode(4);
+        table1.setMinimumSize(new Dimension(-1, -1));
+        table1.setPreferredScrollableViewportSize(new Dimension(600, 400));
+        table1.setSelectionForeground(new Color(-14408925));
+        table1.putClientProperty("Table.isFileList", Boolean.FALSE);
         scrollPane1.setViewportView(table1);
         centerTextPanel = new JPanel();
-        centerTextPanel.setLayout(new GridLayoutManager(7, 3, new Insets(30, 0, 50, 20), -1, -1));
+        centerTextPanel.setLayout(new GridLayoutManager(8, 5, new Insets(30, 0, 50, 20), -1, -1));
         centerTextPanel.setBackground(new Color(-8679521));
         pessoalRootPanel.add(centerTextPanel, BorderLayout.CENTER);
         centerTextPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         nomeTextField = new JTextField();
         Font nomeTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, nomeTextField.getFont());
         if (nomeTextFieldFont != null) nomeTextField.setFont(nomeTextFieldFont);
-        centerTextPanel.add(nomeTextField, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(nomeTextField, new GridConstraints(0, 0, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         emailTextField = new JTextField();
         Font emailTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, emailTextField.getFont());
         if (emailTextFieldFont != null) emailTextField.setFont(emailTextFieldFont);
-        centerTextPanel.add(emailTextField, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(emailTextField, new GridConstraints(1, 0, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         cpfTextField = new JTextField();
         Font cpfTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, cpfTextField.getFont());
         if (cpfTextFieldFont != null) cpfTextField.setFont(cpfTextFieldFont);
-        centerTextPanel.add(cpfTextField, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(cpfTextField, new GridConstraints(2, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         codBancoTextField = new JTextField();
         Font codBancoTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, codBancoTextField.getFont());
         if (codBancoTextFieldFont != null) codBancoTextField.setFont(codBancoTextFieldFont);
-        centerTextPanel.add(codBancoTextField, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(codBancoTextField, new GridConstraints(4, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         agenciaTextField = new JTextField();
         Font agenciaTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, agenciaTextField.getFont());
         if (agenciaTextFieldFont != null) agenciaTextField.setFont(agenciaTextFieldFont);
-        centerTextPanel.add(agenciaTextField, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        centerTextPanel.add(agenciaTextField, new GridConstraints(5, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         contaTextField = new JTextField();
         Font contaTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, contaTextField.getFont());
         if (contaTextFieldFont != null) contaTextField.setFont(contaTextFieldFont);
@@ -432,27 +467,51 @@ public class PessoalFrame extends JInternalFrame {
         dvTextField = new JTextField();
         Font dvTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, dvTextField.getFont());
         if (dvTextFieldFont != null) dvTextField.setFont(dvTextFieldFont);
-        centerTextPanel.add(dvTextField, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
-        final JLabel label8 = new JLabel();
-        Font label8Font = this.$$$getFont$$$(null, Font.BOLD, -1, label8.getFont());
-        if (label8Font != null) label8.setFont(label8Font);
-        label8.setForeground(new Color(-1));
-        label8.setText("DV:");
-        centerTextPanel.add(label8, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        centerTextPanel.add(dvTextField, new GridConstraints(6, 2, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         final JLabel label9 = new JLabel();
         Font label9Font = this.$$$getFont$$$(null, Font.BOLD, -1, label9.getFont());
         if (label9Font != null) label9.setFont(label9Font);
         label9.setForeground(new Color(-1));
-        label9.setText("Rep:");
-        centerTextPanel.add(label9, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label9.setText("DV:");
+        centerTextPanel.add(label9, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label10 = new JLabel();
+        Font label10Font = this.$$$getFont$$$(null, Font.BOLD, -1, label10.getFont());
+        if (label10Font != null) label10.setFont(label10Font);
+        label10.setForeground(new Color(-1));
+        label10.setText("Rep. Prev.(%):");
+        centerTextPanel.add(label10, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         codAssessorTextField = new JTextField();
         Font codAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, codAssessorTextField.getFont());
         if (codAssessorTextFieldFont != null) codAssessorTextField.setFont(codAssessorTextFieldFont);
         centerTextPanel.add(codAssessorTextField, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        repasseAssessorTextField = new JTextField();
-        Font repasseAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, repasseAssessorTextField.getFont());
-        if (repasseAssessorTextFieldFont != null) repasseAssessorTextField.setFont(repasseAssessorTextFieldFont);
-        centerTextPanel.add(repasseAssessorTextField, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        repassePrevAssessorTextField = new JTextField();
+        Font repassePrevAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, repassePrevAssessorTextField.getFont());
+        if (repassePrevAssessorTextFieldFont != null)
+            repassePrevAssessorTextField.setFont(repassePrevAssessorTextFieldFont);
+        centerTextPanel.add(repassePrevAssessorTextField, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        final JLabel label11 = new JLabel();
+        Font label11Font = this.$$$getFont$$$(null, Font.BOLD, -1, label11.getFont());
+        if (label11Font != null) label11.setFont(label11Font);
+        label11.setForeground(new Color(-1));
+        label11.setText("Rep. Seg.(%):");
+        centerTextPanel.add(label11, new GridConstraints(3, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        repasseSegAssessorTextField = new JTextField();
+        Font repasseSegAssessorTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, repasseSegAssessorTextField.getFont());
+        if (repasseSegAssessorTextFieldFont != null)
+            repasseSegAssessorTextField.setFont(repasseSegAssessorTextFieldFont);
+        centerTextPanel.add(repasseSegAssessorTextField, new GridConstraints(3, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        xerifeComboBox = new JComboBox();
+        centerTextPanel.add(xerifeComboBox, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label12 = new JLabel();
+        Font label12Font = this.$$$getFont$$$(null, Font.BOLD, -1, label12.getFont());
+        if (label12Font != null) label12.setFont(label12Font);
+        label12.setForeground(new Color(-1));
+        label12.setText("Rep. Prev.(%):");
+        centerTextPanel.add(label12, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        repassePrevXerifeTextField = new JTextField();
+        Font repassePrevXerifeTextFieldFont = this.$$$getFont$$$(null, Font.BOLD, -1, repassePrevXerifeTextField.getFont());
+        if (repassePrevXerifeTextFieldFont != null) repassePrevXerifeTextField.setFont(repassePrevXerifeTextFieldFont);
+        centerTextPanel.add(repassePrevXerifeTextField, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         southButtonPanel = new JPanel();
         southButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         southButtonPanel.setBackground(new Color(-10461088));
@@ -514,5 +573,47 @@ public class PessoalFrame extends JInternalFrame {
     public JComponent $$$getRootComponent$$$() {
         return pessoalRootPanel;
     }
+
+
+    // Customize the code for sorting of items in the JComboBox
+    private class SortedComboBoxModel extends DefaultComboBoxModel {
+        public SortedComboBoxModel() {
+            super();
+        }
+
+        public SortedComboBoxModel(Object[] items) {
+            Arrays.sort(items);
+            int size = items.length;
+            for (int i = 0; i < size; i++) {
+                super.addElement(items[i]);
+            }
+            setSelectedItem(items[0]);
+        }
+
+        public SortedComboBoxModel(Vector items) {
+            Collections.sort(items);
+            int size = items.size();
+            for (int i = 0; i < size; i++) {
+                super.addElement(items.elementAt(i));
+            }
+            setSelectedItem(items.elementAt(0));
+        }
+
+        public void addElement(Object element) {
+            insertElementAt(element, 0);
+        }
+
+        public void insertElementAt(Object element, int index) {
+            int size = getSize();
+            for (index = 0; index < size; index++) {
+                Comparable c = (Comparable) getElementAt(index);
+                if (c.compareTo(element) > 0) {
+                    break;
+                }
+            }
+            super.insertElementAt(element, index);
+        }
+    }
+
 
 }
