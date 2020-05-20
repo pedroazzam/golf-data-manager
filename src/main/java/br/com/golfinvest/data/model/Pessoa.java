@@ -8,23 +8,29 @@ public class Pessoa {
     private String email;
     private String cpf;
     private String codigoAssessor;
-    private BigDecimal repasseAssessor;
+    private BigDecimal repassePrevAssessor;
+    private BigDecimal repasseSegAssessor;
     private int codigoBanco;
     private String agencia;
     private String conta;
     private String dv;
+    private String codigoXerife;
+    private BigDecimal repassePrevXerife;
 
-    public Pessoa(int id, String nome, String email, String cpf, String codigoAssessor, BigDecimal repasseAssessor, int codigoBanco, String agencia, String conta, String dv){
+    public Pessoa(int id, String nome, String email, String cpf, String codigoAssessor, BigDecimal repassePrevAssessor, BigDecimal repasseSegAssessor, int codigoBanco, String agencia, String conta, String dv, String codigoXerife, BigDecimal repassePrevXerife){
         this.id=id;
         this.nome=nome;
         this.email=email;
         this.cpf=cpf;
         this.codigoAssessor=codigoAssessor;
-        this.repasseAssessor=repasseAssessor;
+        this.repassePrevAssessor=repassePrevAssessor;
+        this.repasseSegAssessor=repasseSegAssessor;
         this.codigoBanco=codigoBanco;
         this.agencia=agencia;
         this.conta=conta;
         this.dv=dv;
+        this.codigoXerife=codigoXerife;
+        this.repassePrevXerife=repassePrevXerife;
     }
 
     public int getId() {
@@ -67,12 +73,20 @@ public class Pessoa {
         this.codigoAssessor = codigoAssessor;
     }
 
-    public BigDecimal getRepasseAssessor() {
-        return repasseAssessor;
+    public BigDecimal getRepassePrevAssessor() {
+        return repassePrevAssessor;
     }
 
-    public void setRepasseAssessor(BigDecimal repasseAssessor) {
-        this.repasseAssessor = repasseAssessor;
+    public void setRepassePrevAssessor(BigDecimal repassePrevAssessor) {
+        this.repassePrevAssessor = repassePrevAssessor;
+    }
+
+    public BigDecimal getRepasseSegAssessor() {
+        return repasseSegAssessor;
+    }
+
+    public void setRepasseSegAssessor(BigDecimal repasseSegAssessor) {
+        this.repasseSegAssessor = repasseSegAssessor;
     }
 
     public int getCodigoBanco() {
@@ -105,5 +119,21 @@ public class Pessoa {
 
     public void setDv(String dv) {
         this.dv = dv;
+    }
+
+    public String getCodigoXerife() {
+        return codigoXerife;
+    }
+
+    public void setCodigoXerife(String codigoXerife) {
+        this.codigoXerife = codigoXerife;
+    }
+
+    public BigDecimal getRepassePrevXerife() {
+        return repassePrevXerife;
+    }
+
+    public void setRepassePrevXerife(BigDecimal repassePrevXerife) {
+        this.repassePrevXerife = repassePrevXerife;
     }
 }

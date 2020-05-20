@@ -184,10 +184,14 @@ public class MainFrame extends JFrame {
                 if (pessoal == null || pessoal.isClosed()) {
                     pessoal = new PessoalFrame(getTitle(), jdbcTemplate);
 
-                    Dimension contentPaneSize = getContentPane().getSize();
-                    Dimension jInternalFrameSize = pessoal.getSize();
-                    pessoal.setLocation((contentPaneSize.width - jInternalFrameSize.width) / 3,
-                            (contentPaneSize.height - jInternalFrameSize.height) / 3);
+//                    Dimension contentPaneSize = getContentPane().getSize();
+//                    Dimension jInternalFrameSize = pessoal.getSize();
+//                    pessoal.setLocation((contentPaneSize.width - jInternalFrameSize.width) / 3,
+//                            (contentPaneSize.height - jInternalFrameSize.height) / 3);
+
+                    Dimension contentPaneSize = contentPanel.getSize();
+                    pessoal.setSize(contentPaneSize.width, (int) (contentPaneSize.height * 0.9));
+                    pessoal.setLocation(0, 0);
 
                     contentPanel.add(pessoal);
                 }

@@ -22,7 +22,7 @@ public class PessoalMassAdd extends JFrame {
 
     private JdbcTemplate jdbcTemplate;
     DefaultTableModel tableModel;
-    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "Repasse", "Cod Banco", "Agência", "Conta", "dv"};
+    String col[] = {"Nome", "E-Mail", "CPF", "Cod Assessor", "RepPrev", "RepSeg", "Cod Banco", "Agência", "Conta", "dv", "Xerife", "RepSeg"};
     List<Pessoa> pessoas;
     int editingId;
     private String notInsertedMessage = "";
@@ -35,7 +35,7 @@ public class PessoalMassAdd extends JFrame {
         super();
         title = title + " - (Registro de pessoal em massa no banco de dados)";
         setTitle(title);
-        setSize(1000, 480);
+        setSize(1100, 480);
         jdbcTemplate = jdbcTemplatePassed;
 
         initComponents();
@@ -56,7 +56,7 @@ public class PessoalMassAdd extends JFrame {
 
         // Insert 200 blank lines to table
         for (int i = 1; i <= 200; i++) {
-            Object[] object = {null, null, null, null, null, null, null, null, null};
+            Object[] object = {null, null, null, null, null, null, null, null, null, null, null, null};
             tableModel.addRow(object);
         }
 
@@ -80,7 +80,7 @@ public class PessoalMassAdd extends JFrame {
 //            System.out.println("Verificando: " + tableModel.getValueAt(i, 0));
             if ((tableModel.getValueAt(i, 0) != null) && (!tableModel.getValueAt(i, 0).equals(""))) {
                 System.out.println("Dentro do IF: " + tableModel.getValueAt(i, 0));
-                for (int n = 0; n <= 7; n++) {
+                for (int n = 0; n <= 11; n++) {
                     if (tableModel.getValueAt(i, n) == null) {
                         tableModel.setValueAt("", i, n);
                     }
@@ -90,14 +90,18 @@ public class PessoalMassAdd extends JFrame {
                         tableModel.getValueAt(i, 1).toString(),
                         tableModel.getValueAt(i, 2).toString(),
                         tableModel.getValueAt(i, 3).toString(),
-                        tableModel.getValueAt(i, 4).toString(),
-                        tableModel.getValueAt(i, 5).toString(),
+                        ((tableModel.getValueAt(i, 4).toString() == null) || (tableModel.getValueAt(i, 4).toString().isEmpty()) ? "0" : tableModel.getValueAt(i, 4).toString()),
+                        ((tableModel.getValueAt(i, 5).toString() == null) || (tableModel.getValueAt(i, 5).toString().isEmpty()) ? "0" : tableModel.getValueAt(i, 5).toString()),
                         tableModel.getValueAt(i, 6).toString(),
                         tableModel.getValueAt(i, 7).toString(),
-                        tableModel.getValueAt(i, 8).toString());
+                        tableModel.getValueAt(i, 8).toString(),
+                        tableModel.getValueAt(i, 9).toString(),
+                        tableModel.getValueAt(i, 10).toString(),
+                        ((tableModel.getValueAt(i, 11).toString() == null) || (tableModel.getValueAt(i, 11).toString().isEmpty()) ? "0" : tableModel.getValueAt(i, 11).toString()));
+
                 if (inserted) {
                     // Delete informations at current line
-                    for (int n = 0; n <= 8; n++) {
+                    for (int n = 0; n <= 11; n++) {
                         tableModel.setValueAt("", i, n);
                     }
                     inserted = false;
@@ -110,18 +114,21 @@ public class PessoalMassAdd extends JFrame {
         }
     }
 
-    public boolean inserirPessoal(String nome, String email, String cpf, String codAssessor, String repasseAssessor, String codBanco, String agencia, String conta, String dv) {
+    public boolean inserirPessoal(String nome, String email, String cpf, String codAssessor, String repassePrevAssessor, String repasseSegAssessor, String codBanco, String agencia, String conta, String dv, String codigoXerife, String repassePrevXerife) {
 
-        String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, repasse_assessor, codigo_banco, agencia, conta, dv) VALUES( ";
+        String sql = "INSERT INTO pessoal (nome, email, cpf, codigo_assessor, repasse_prev_assessor, repasse_seg_assessor, codigo_banco, agencia, conta, dv, codigo_xerife, repasse_prev_xerife) VALUES( ";
         sql = sql + "'" + nome + "', ";
         sql = sql + "'" + email + "', ";
         sql = sql + "'" + cpf + "', ";
         sql = sql + "'" + codAssessor + "', ";
-        sql = sql + "'" + repasseAssessor + "', ";
+        sql = sql + "'" + repassePrevAssessor + "', ";
+        sql = sql + "'" + repasseSegAssessor + "', ";
         sql = sql + "'" + codBanco + "', ";
         sql = sql + "'" + agencia + "', ";
         sql = sql + "'" + conta + "', ";
-        sql = sql + "'" + dv + "');";
+        sql = sql + "'" + dv + "', ";
+        sql = sql + "'" + codigoXerife + "', ";
+        sql = sql + "'" + repassePrevXerife + "');";
         try {
             jdbcTemplate.execute(sql);
             return true;
