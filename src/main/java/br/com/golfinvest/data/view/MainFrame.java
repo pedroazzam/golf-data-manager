@@ -184,10 +184,14 @@ public class MainFrame extends JFrame {
                 if (pessoal == null || pessoal.isClosed()) {
                     pessoal = new PessoalFrame(getTitle(), jdbcTemplate);
 
-                    Dimension contentPaneSize = getContentPane().getSize();
-                    Dimension jInternalFrameSize = pessoal.getSize();
-                    pessoal.setLocation((contentPaneSize.width - jInternalFrameSize.width) / 3,
-                            (contentPaneSize.height - jInternalFrameSize.height) / 3);
+//                    Dimension contentPaneSize = getContentPane().getSize();
+//                    Dimension jInternalFrameSize = pessoal.getSize();
+//                    pessoal.setLocation((contentPaneSize.width - jInternalFrameSize.width) / 3,
+//                            (contentPaneSize.height - jInternalFrameSize.height) / 3);
+
+                    Dimension contentPaneSize = contentPanel.getSize();
+                    pessoal.setSize(contentPaneSize.width, (int) (contentPaneSize.height * 0.9));
+                    pessoal.setLocation(0, 0);
 
                     contentPanel.add(pessoal);
                 }
@@ -284,12 +288,12 @@ public class MainFrame extends JFrame {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     out.append(line);   // add everything to StringBuilder
-//                    JOptionPane.showMessageDialog(null, line);
-                    System.out.println("antes " + line + " depois");
-                    jdbcTemplate.execute(line);
                     // here you can have your logic of comparison.
-                    if (line.toString().equals(".")) {
-                        // do something
+                    if (line.toString().substring(0, 2).equals("--")) {
+                        System.out.println("Command Disabled: " + line);
+                    } else {
+                        System.out.println("Command Enabled: " + line);
+                        jdbcTemplate.execute(line);
                     }
                 }
             } catch (IOException ioException) {

@@ -219,7 +219,7 @@ public class CapitaoFrame extends JInternalFrame {
 
     public void fillCapitaoComboBox() {
         String sql = "SELECT * from PESSOAL;";
-        List<Pessoa> pessoas = jdbcTemplate.query(sql, (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv")));
+        List<Pessoa> pessoas = jdbcTemplate.query(sql, (rs, rowNum) -> new Pessoa(rs.getInt("id"), rs.getString("nome"), rs.getString("email"), rs.getString("cpf"), rs.getString("codigo_assessor"), rs.getBigDecimal("repasse_prev_assessor"), rs.getBigDecimal("repasse_seg_assessor"), rs.getInt("codigo_banco"), rs.getString("agencia"), rs.getString("conta"), rs.getString("dv"), rs.getString("codigo_xerife"), rs.getBigDecimal("repasse_prev_xerife")));
         pessoas.forEach(pessoa -> capitaoComboBoxModel.addElement(pessoa.getNome()));
         capitaoComboBox.setSelectedItem(null);
     }
