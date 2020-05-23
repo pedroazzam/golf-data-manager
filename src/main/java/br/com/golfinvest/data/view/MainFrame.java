@@ -113,6 +113,12 @@ public class MainFrame extends JFrame {
         });
 
         setExtendedState(Frame.MAXIMIZED_BOTH);
+
+        // java - get screen size using the Toolkit class
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        System.out.println("W= " + screenSize.width + " H= " + screenSize.height);
+        buttonsPanel.setPreferredSize(new Dimension((int) (screenSize.width / 5), buttonsPanel.getPreferredSize().height));
+
         setVisible(true);
 
         credentialValidation();
@@ -356,14 +362,14 @@ public class MainFrame extends JFrame {
         createDBButton.setText("Criar Banco de Dados");
         dbPanel.add(createDBButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayoutManager(4, 1, new Insets(30, 50, 20, 50), -1, -1));
+        buttonsPanel.setLayout(new GridLayoutManager(4, 1, new Insets(30, 30, 20, 30), -1, -1));
         buttonsPanel.setBackground(new Color(-14531487));
         mainFrameRootPanel.add(buttonsPanel, BorderLayout.WEST);
         pessoalButton = new JButton();
         Font pessoalButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, pessoalButton.getFont());
         if (pessoalButtonFont != null) pessoalButton.setFont(pessoalButtonFont);
         pessoalButton.setIcon(new ImageIcon(getClass().getResource("/people-100x100.png")));
-        pessoalButton.setText("Pessoal/Assessores");
+        pessoalButton.setText("Pessoal");
         buttonsPanel.add(pessoalButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         produtoButton = new JButton();
         Font produtoButtonFont = this.$$$getFont$$$(null, Font.BOLD, 18, produtoButton.getFont());
