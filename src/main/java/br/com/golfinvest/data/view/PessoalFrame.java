@@ -9,9 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyVetoException;
 import java.io.*;
 import java.util.*;
 import java.util.List;
@@ -25,6 +26,8 @@ public class PessoalFrame extends JInternalFrame {
     SortedComboBoxModel xerifeComboBoxModel;
     List<Pessoa> pessoas;
     int editingId;
+    String editingCPF;
+    int sR = -1;
 
     private JPanel pessoalRootPanel;
     private JButton editButton;
@@ -50,6 +53,8 @@ public class PessoalFrame extends JInternalFrame {
     private JTextField repasseSegAssessorTextField;
     private JComboBox xerifeComboBox;
     private JTextField repassePrevXerifeTextField;
+    private JButton resizeTableButton;
+    private JButton refreshTableButton;
 
     public PessoalFrame(String title, JdbcTemplate jdbcTemplatePassed) {
         super();
@@ -86,9 +91,15 @@ public class PessoalFrame extends JInternalFrame {
         setClosable(true); // set closed
         setResizable(true); // set resizable
 
+        // java - get screen size using the Toolkit class
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        System.out.println("W= " + screenSize.width + " H= " + screenSize.height);
+        table1.setPreferredScrollableViewportSize(new Dimension((int) (screenSize.width / 3.5), screenSize.height / 3));
+
         setVisible(true);
         preencherTabelaEComboBoxSelectAll();
     }
+
 
     public void regEvents() {
 
@@ -120,12 +131,28 @@ public class PessoalFrame extends JInternalFrame {
             @Override
             public void componentAdded(ContainerEvent e) {
                 super.componentAdded(e);
-                //System.out.println("Someone is editing me!");
-                //Caso entre em modo de edição da tabela, rora um select again.
-                int sR = table1.getSelectedRow();
-                cancelarEdicao();
-                table1.setRowSelectionInterval(sR, sR);
-                editarPessoal();
+                nomeTextField.setRequestFocusEnabled(true);
+                nomeTextField.requestFocus();
+                JOptionPane.showMessageDialog(null, "Para editar dados, selecione a linha na tabela e aperte o botão Editar.", "Selecionar para editar", JOptionPane.WARNING_MESSAGE);
+//                cancelarEdicao();
+//                preencherTabelaEComboBoxSelectAll();
+//                table1.getSelectionModel().clearSelection();
+//                preencherTabelaEComboBoxSelectAll();
+                System.out.println("Someone is trying to edit me!");
+
+                //este estava ativo
+//                sR = table1.convertRowIndexToModel(table1.getSelectedRow());//table1.getSelectedRow();
+//
+//                System.out.println("TESTE DE INDEX: " + table1.convertRowIndexToModel(table1.getSelectedRow()));
+//
+//                pessoas.forEach(p -> {
+//                    if (p.getCpf() == tableModel.getValueAt(sR, 2)) {
+//                        editingId = p.getId();
+//                        editingCPF = p.getCpf();
+//                        System.out.println("Foi selecionado na tabela o ID: " + editingId + " E cpf: " + editingCPF);
+//                    }
+//                });
+//                editarPessoal();
             }
         });
 
@@ -164,8 +191,37 @@ public class PessoalFrame extends JInternalFrame {
             }
         });
 
-    }
+        refreshTableButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                cancelarEdicao();
+                preencherTabelaEComboBoxSelectAll();
+                JOptionPane.showMessageDialog(null, "Tabela atualizada com sucesso!", "Refresh Table", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
+        resizeTableButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // java - get screen size using the Toolkit class
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                if (resizeTableButton.getText() == "Aumentar") {
+                    System.out.println("W= " + screenSize.width + " H= " + screenSize.height);
+                    table1.setPreferredScrollableViewportSize(new Dimension((int) (screenSize.width / 1.5), screenSize.height / 3));
+                    table1.setFillsViewportHeight(true);
+//                    table1.setCellSelectionEnabled(true);
+                    resizeTableButton.setText("Encolher");
+                } else {
+                    System.out.println("W= " + screenSize.width + " H= " + screenSize.height);
+                    table1.setPreferredScrollableViewportSize(new Dimension((int) (screenSize.width / 3.5), screenSize.height / 3));
+                    table1.setFillsViewportHeight(true);
+//                    table1.setCellSelectionEnabled(true);
+                    resizeTableButton.setText("Aumentar");
+                }
+            }
+        });
+
+    }
 
     public void preencherTabelaEComboBoxSelectAll() {
 
@@ -184,6 +240,22 @@ public class PessoalFrame extends JInternalFrame {
             xerifeComboBoxModel.addElement(pessoa.getCodigoAssessor());
         });
         xerifeComboBox.setSelectedIndex(0);
+        resizeColumnWidth(table1);
+    }
+
+    public void resizeColumnWidth(JTable table) {
+        final TableColumnModel columnModel = table.getColumnModel();
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 15; // Min width
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width + 15, width);
+            }
+            if (width > 300)
+                width = 300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
     }
 
     public void limparCampos() {
@@ -199,13 +271,28 @@ public class PessoalFrame extends JInternalFrame {
         dvTextField.setText("");
         xerifeComboBox.setSelectedIndex(0);
         repassePrevXerifeTextField.setText("");
+        sR = -1;
     }
 
     public void editarPessoal() {
         if (editButton.getText() == "Editar") {
             // iniciar a edição
             if (table1.getSelectedRow() > -1) {
-                int r = table1.getSelectedRow();
+                if (sR == -1) {
+                    sR = table1.convertRowIndexToModel(table1.getSelectedRow());
+                }
+
+                int r = sR;//table1.getSelectedRow();
+                System.out.println("r= " + r + " e cpf= " + tableModel.getValueAt(r, 2));
+
+//                pessoas.forEach(p -> {
+//                    if (p.getCpf() == tableModel.getValueAt(r, 2)) {
+//                        editingId = p.getId();
+//                        System.out.println("O ID que está sendo editado é: " + editingId);
+//                    }
+//
+//                });
+
                 editingId = pessoas.get(r).getId();
 
                 System.out.println("Edição iniciada para: " + pessoas.get(r).getNome());
@@ -269,12 +356,12 @@ public class PessoalFrame extends JInternalFrame {
         limparCampos();
         editButton.setText("Editar");
         insertButton.setEnabled(true);
-        preencherTabelaEComboBoxSelectAll();
+//        preencherTabelaEComboBoxSelectAll();
     }
 
     public void deletarPessoal() {
         if (table1.getSelectedRow() > -1) {
-
+            table1.convertRowIndexToModel(table1.getSelectedRow());
             int[] rList = table1.getSelectedRows();
             String message;
 
@@ -288,9 +375,10 @@ public class PessoalFrame extends JInternalFrame {
             if (reply == JOptionPane.YES_OPTION) {
 
                 for (int i = 0; i < rList.length; i++) {
-                    System.out.println("DELETANDO... " + rList[i]);
+                    //Converting rList from view to model
+                    int r = table1.convertRowIndexToModel(rList[i]);
 
-                    int r = rList[i]; //table1.getSelectedRow();
+                    System.out.println("DELETANDO... " + r);
                     editingId = pessoas.get(r).getId();
 
                     System.out.println("Delete iniciada para: " + pessoas.get(r).getNome() + " Row: " + r);
@@ -306,7 +394,8 @@ public class PessoalFrame extends JInternalFrame {
                     }
 
                 }
-                limparCampos();
+//                limparCampos();
+                cancelarEdicao();
                 preencherTabelaEComboBoxSelectAll();
                 JOptionPane.showMessageDialog(null, "Informações deletadas com sucesso", "Deletado", JOptionPane.INFORMATION_MESSAGE);
 
@@ -421,20 +510,33 @@ public class PessoalFrame extends JInternalFrame {
         label8.setText("Xerife:");
         westLabelPanel.add(label8, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         eastGridPanel = new JPanel();
-        eastGridPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 10), -1, -1));
+        eastGridPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 10), -1, -1));
         eastGridPanel.setBackground(new Color(-8679521));
         pessoalRootPanel.add(eastGridPanel, BorderLayout.EAST);
         final JScrollPane scrollPane1 = new JScrollPane();
         scrollPane1.setBackground(new Color(-8679521));
-        eastGridPanel.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        eastGridPanel.add(scrollPane1, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         table1 = new JTable();
         table1.setAutoCreateColumnsFromModel(true);
-        table1.setAutoResizeMode(4);
+        table1.setAutoCreateRowSorter(true);
+        table1.setAutoResizeMode(0);
+        table1.setColumnSelectionAllowed(false);
+        table1.setInheritsPopupMenu(false);
         table1.setMinimumSize(new Dimension(-1, -1));
         table1.setPreferredScrollableViewportSize(new Dimension(600, 400));
         table1.setSelectionForeground(new Color(-14408925));
         table1.putClientProperty("Table.isFileList", Boolean.FALSE);
         scrollPane1.setViewportView(table1);
+        resizeTableButton = new JButton();
+        Font resizeTableButtonFont = this.$$$getFont$$$(null, -1, 9, resizeTableButton.getFont());
+        if (resizeTableButtonFont != null) resizeTableButton.setFont(resizeTableButtonFont);
+        resizeTableButton.setText("Aumentar");
+        eastGridPanel.add(resizeTableButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        refreshTableButton = new JButton();
+        Font refreshTableButtonFont = this.$$$getFont$$$(null, -1, 9, refreshTableButton.getFont());
+        if (refreshTableButtonFont != null) refreshTableButton.setFont(refreshTableButtonFont);
+        refreshTableButton.setText("Refresh table");
+        eastGridPanel.add(refreshTableButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         centerTextPanel = new JPanel();
         centerTextPanel.setLayout(new GridLayoutManager(8, 5, new Insets(30, 0, 50, 20), -1, -1));
         centerTextPanel.setBackground(new Color(-8679521));

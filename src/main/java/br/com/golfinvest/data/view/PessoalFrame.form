@@ -98,7 +98,7 @@
           </component>
         </children>
       </grid>
-      <grid id="9fa19" binding="eastGridPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="9fa19" binding="eastGridPanel" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="10"/>
         <constraints border-constraint="East"/>
         <properties>
@@ -108,7 +108,7 @@
         <children>
           <scrollpane id="5de58">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-8679521"/>
@@ -119,7 +119,10 @@
                 <constraints/>
                 <properties>
                   <autoCreateColumnsFromModel value="true"/>
-                  <autoResizeMode value="4"/>
+                  <autoCreateRowSorter value="true"/>
+                  <autoResizeMode value="0"/>
+                  <columnSelectionAllowed value="false"/>
+                  <inheritsPopupMenu value="false"/>
                   <minimumSize width="-1" height="-1"/>
                   <preferredScrollableViewportSize width="600" height="400"/>
                   <selectionForeground color="-14408925"/>
@@ -130,6 +133,24 @@
               </component>
             </children>
           </scrollpane>
+          <component id="dc3c" class="javax.swing.JButton" binding="resizeTableButton">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="9"/>
+              <text value="Aumentar"/>
+            </properties>
+          </component>
+          <component id="7b71e" class="javax.swing.JButton" binding="refreshTableButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="9"/>
+              <text value="Refresh table"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="4b671" binding="centerTextPanel" layout-manager="GridLayoutManager" row-count="8" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
